@@ -1,0 +1,22 @@
+.main-nav .nav-link {
+    transition: all 0.2s ease; 
+}
+
+.nav-link.active-link{
+    background-color: #303437;
+    color: #F2F4F5 !important;
+    border-radius: 48px;
+    padding: 10px 20px 10px 12px;
+    font-size: 14px;
+    gap: 8px;
+}
+
+.main-nav {
+    border-radius: 24px;
+    background: #FFF;
+    box-shadow: 10px 14px 56px 0 rgba(0, 0, 0, 0.2);
+    padding: 8px 24px;
+    display: 'flex';
+    gap: 8px;
+    
+}

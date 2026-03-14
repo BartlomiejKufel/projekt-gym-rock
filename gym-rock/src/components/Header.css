@@ -1,0 +1,35 @@
+.top-banner-container {
+    width: 100vw;
+    height: 35vh;
+    overflow: hidden;
+    
+    /* Jeśli ten pasek ma "pływać" przyklejony do góry podczas przewijania, od komentuj poniższe: */
+    /* position: fixed; */
+    /* top: 0; */
+    /* z-index: 1000; */
+    position: relative;
+}
+
+.top-banner-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+.top-banner-title{
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+
+    /* --- Stylizacja "małego diva" --- */
+    background-color: #EEEDED;
+    color: #303437;
+    padding: 5px 15vw;
+    border-radius: 15px 15px 0 0;
+    text-align: left;
+    font-size: 32px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 40px;
+}
