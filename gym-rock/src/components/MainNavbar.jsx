@@ -9,7 +9,7 @@ const MainNavbar = ({setTitle}) => {
   return (
     <Navbar fixed="bottom" className="justify-content-center" >
       <Container className="justify-content-center mb-4">
-        <Nav className="main-nav px-3">
+        <Nav className="main-nav px-3 text-center">
             <Nav.Link
               as={Link} 
               to="/home" 

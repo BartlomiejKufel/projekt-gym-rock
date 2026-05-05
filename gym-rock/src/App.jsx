@@ -4,18 +4,26 @@ import MainNavbar from "./components/MainNavbar";
 import Header from "./components/Header";
 import Instructors from "./pages/Instructors";
 import { useState } from 'react';
+import Login from './pages/Login';
+import Home from './pages/Home';
+import Statistics from './pages/Statistics';
+import Card from './pages/Card';
 
 function App() {
   const [title, setTitle] = useState("Home");
-
+  const [mainNavbarVisible, setMainNavbarVisible] = useState(true);
+  const [headerVisible, setHeaderVisible] = useState(true);
   return (
     <BrowserRouter>
-      <Header title={title}/>
-      <MainNavbar setTitle={setTitle}/>
-
+      {headerVisible && <Header title={title} />}
       <Routes>
-        <Route path="/" element={<Instructors />} />
+        <Route path="/" element={<Login setHeaderVisible={setHeaderVisible} setMainNavbarVisible={setMainNavbarVisible} />} />
+        <Route path="/instructors" element={<Instructors />} />
+        <Route path="/home" element={<Home />} />
+        <Route path="/statistics" element={<Statistics />} />
+        <Route path="/card" element={<Card />} />
       </Routes>
+      {mainNavbarVisible && <MainNavbar setTitle={setTitle} />}
     </BrowserRouter>
   )
 }

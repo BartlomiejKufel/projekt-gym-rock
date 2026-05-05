@@ -1,0 +1,12 @@
+.main{
+    background-color: #8572FF;
+}
+
+.calendar-box{
+    background: #BAB0F9;
+    border-radius: 10px;
+}
+
+.calendar-box img{
+    width: 48px;
+}

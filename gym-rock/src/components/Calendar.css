@@ -1,0 +1,11 @@
+.calendar-button{
+    background-color: #DE496E !important;
+    border-color: #DE496E !important;
+    color: white !important;
+}
+
+.calendar-button:hover{
+    background-color: transparent !important;
+    border-color: #DE496E !important;
+    color: #DE496E !important;
+}

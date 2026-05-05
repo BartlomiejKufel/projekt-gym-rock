@@ -22,10 +22,9 @@
     bottom: 0;
     width: 100%;
 
-    /* --- Stylizacja "małego diva" --- */
     background-color: #EEEDED;
     color: #303437;
-    padding: 5px 15vw;
+    padding: 5px 5vw;
     border-radius: 15px 15px 0 0;
     text-align: left;
     font-size: 32px;

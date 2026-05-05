@@ -1,0 +1,87 @@
+/* Login.css */
+.login-page-wrapper {
+    background-image: url('/img/main-wall.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.login-logo {
+    max-width: 300px;
+    height: auto;
+    filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.5));
+}
+
+.login-card {
+    background-color: rgba(255, 255, 255, 0.85);
+    border-radius: 15px;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.login-label {
+    font-size: 1.1rem;
+    color: #333;
+}
+
+.login-input {
+    border: none !important;
+    border-radius: 8px 0 0 8px !important;
+    padding: 10px 15px !important;
+    font-size: 1rem !important;
+}
+
+.login-input:focus {
+    box-shadow: none !important;
+    border-color: #ccc !important;
+}
+
+.login-icon-bg {
+    background-color: #343a40 !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 0 8px 8px 0 !important;
+    padding: 0 15px !important;
+}
+
+.login-remember-label {
+    font-size: 0.95rem;
+    color: #333;
+    font-weight: 500;
+}
+
+.login-checkbox .form-check-input {
+    width: 1.2rem;
+    height: 1.2rem;
+    border: 1.5px solid #333;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 0;
+}
+
+.login-checkbox .form-check-input:checked {
+    background-color: #343a40;
+    border-color: #343a40;
+}
+
+.login-submit-btn {
+    background-color: #343a40 !important;
+    border: none !important;
+    border-radius: 8px !important;
+    font-size: 1.1rem !important;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+    width: 80%;
+}
+
+.login-submit-btn:hover {
+    background-color: #23272b !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
