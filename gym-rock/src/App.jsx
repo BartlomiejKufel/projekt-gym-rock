@@ -8,6 +8,7 @@ import Login from './pages/Login';
 import Home from './pages/Home';
 import Statistics from './pages/Statistics';
 import Card from './pages/Card';
+import Settings from './pages/Settings';
 
 function App() {
   const [title, setTitle] = useState("Home");
@@ -22,6 +23,7 @@ function App() {
         <Route path="/home" element={<Home />} />
         <Route path="/statistics" element={<Statistics />} />
         <Route path="/card" element={<Card />} />
+        <Route path="/settings" element={<Settings />} />
       </Routes>
       {mainNavbarVisible && <MainNavbar setTitle={setTitle} />}
     </BrowserRouter>

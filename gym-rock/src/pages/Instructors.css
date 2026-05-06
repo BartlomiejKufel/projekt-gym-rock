@@ -1,8 +1,80 @@
 body {
-  overflow-x: hidden;
+    overflow-x: hidden;
 }
 
 ul {
-  list-style: none;
-  padding: 0;
+    list-style: none;
+    padding: 0;
+}
+
+.text-dark-gray {
+    color: #4a4d52;
+}
+
+.event-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 2000;
+}
+
+.event-modal-backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    animation: fadeIn 0.2s ease-out;
+}
+
+.event-modal-panel {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    border-radius: 30px 30px 0 0;
+    box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.2);
+    animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.event-modal-handle {
+    width: 80px;
+    height: 5px;
+    background-color: rgba(0, 0, 0, 0.6);
+    border-radius: 3px;
+}
+
+.event-instructor-img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid rgba(255, 255, 255, 0.9);
+}
+
+.event-desc {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    opacity: 0.95;
+    text-align: justify;
+}
+
+.event-register-btn {
+    border-radius: 12px;
+    color: #333;
+    font-size: 1.1rem;
+    width: 80%;
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(100%);
+    }
+
+    to {
+        transform: translateY(0);
+    }
 }

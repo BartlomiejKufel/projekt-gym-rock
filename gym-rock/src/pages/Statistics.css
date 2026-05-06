@@ -1,0 +1,53 @@
+.stats-container {
+    min-height: 80vh;
+}
+
+.text-dark-gray {
+    color: #3b3d40;
+}
+
+.stats-dropdown-toggle {
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.stats-dropdown-toggle::after {
+    margin-left: 0.5rem;
+}
+
+.chart-wrapper {
+    background: transparent;
+    padding-top: 10px;
+}
+
+.custom-tooltip {
+    background-color: white;
+    padding: 5px 10px;
+    border-radius: 8px;
+    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.15);
+    font-size: 0.85rem;
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+}
+
+.stats-card {
+    border-radius: 20px !important;
+}
+
+.stats-icon-bg {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.bg-blue-light {
+    background-color: #dbeafe;
+}
+
+.bg-red-light {
+    background-color: #fee2e2;
+}
