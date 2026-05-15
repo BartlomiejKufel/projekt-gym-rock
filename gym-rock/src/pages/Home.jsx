@@ -35,6 +35,8 @@ const passes = [
 ];
 
 const Home = ({ userId }) => {
+
+
     return (
         <Container className="mb-5 pt-4 home-container">
             <Row className="mx-2 mb-3">

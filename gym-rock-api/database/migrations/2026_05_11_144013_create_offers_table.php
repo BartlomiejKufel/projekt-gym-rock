@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id('offer_id');
             $table->string('name', 255);
             $table->float('price');
-            $table->time('duration');
+            $table->int('duration');
         });
     }
 

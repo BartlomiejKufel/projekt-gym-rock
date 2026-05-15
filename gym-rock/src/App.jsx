@@ -1,5 +1,5 @@
 import './App.css'
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import MainNavbar from "./components/MainNavbar";
 import Header from "./components/Header";
 import Instructors from "./pages/Instructors";
@@ -9,6 +9,13 @@ import Home from './pages/Home';
 import Statistics from './pages/Statistics';
 import Card from './pages/Card';
 import Settings from './pages/Settings';
+
+const ProtectedRoute = ({ userId, children }) => {
+  if (!userId) {
+    return <Navigate to="/" replace />;
+  }
+  return children;
+};
 
 function App() {
   const [title, setTitle] = useState("Home");
@@ -20,11 +27,11 @@ function App() {
       {headerVisible && <Header title={title} />}
       <Routes>
         <Route path="/" element={<Login setHeaderVisible={setHeaderVisible} setMainNavbarVisible={setMainNavbarVisible} setUserId={setUserId} />} />
-        <Route path="/instructors" element={<Instructors userId={userId} />} />
-        <Route path="/home" element={<Home userId={userId} />} />
-        <Route path="/statistics" element={<Statistics userId={userId} />} />
-        <Route path="/card" element={<Card userId={userId} />} />
-        <Route path="/settings" element={<Settings userId={userId} />} />
+        <Route path="/instructors" element={<ProtectedRoute userId={userId}><Instructors userId={userId} /></ProtectedRoute>} />
+        <Route path="/home" element={<ProtectedRoute userId={userId}><Home userId={userId} /></ProtectedRoute>} />
+        <Route path="/statistics" element={<ProtectedRoute userId={userId}><Statistics userId={userId} /></ProtectedRoute>} />
+        <Route path="/card" element={<ProtectedRoute userId={userId}><Card userId={userId} /></ProtectedRoute>} />
+        <Route path="/settings" element={<ProtectedRoute userId={userId}><Settings userId={userId} /></ProtectedRoute>} />
       </Routes>
       {mainNavbarVisible && <MainNavbar setTitle={setTitle} />}
     </BrowserRouter>

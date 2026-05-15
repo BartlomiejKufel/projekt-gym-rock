@@ -56,5 +56,64 @@ class DatabaseSeeder extends Seeder
                 'role_id' => 4,
             ]
         ]);
+        
+        Offer::insert([
+            [
+                'name' => 'Karnet Standard',
+                'price' => 200.0,
+                'duration' => 30,
+            ],
+            [
+                'name' => 'Karnet Studencki',
+                'price' => 160.0,
+                'duration' => 30,
+            ],
+            [
+                'name' => 'MoonBoard',
+                'price' => 100.0,
+                'duration' => 15,
+            ],
+            [
+                'name' => 'Sauna',
+                'price' => 25.0,
+                'duration' => 1,
+            ],
+            [
+                'name' => 'Wejście jednorazowe',
+                'price' => 45.0,
+                'duration' => 1,
+            ],
+            [
+                'name' => 'Wejście ulgowe',
+                'price' => 35.0,
+                'duration' => 1,
+            ],
+            [
+                'name' => 'Wejście poranne',
+                'price' => 30.0,
+                'duration' => 1,
+            ],
+            [
+                'name' => 'Karnet Półroczny',
+                'price' => 950.0,
+                'duration' => 180,
+            ],
+            [
+                'name' => 'Trening personalny',
+                'price' => 120.0,
+                'duration' => 1,
+            ],
+            [
+                'name' => 'Sekcja wspinaczkowa',
+                'price' => 240.0,
+                'duration' => 30,
+            ],
+            [
+                'name' => 'Kurs asekuracji dołowej',
+                'price' => 300.0,
+                'duration' => 1,
+            ],
+        ]);
+
     }
 }
