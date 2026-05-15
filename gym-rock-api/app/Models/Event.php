@@ -12,7 +12,7 @@ class Event extends Model
     protected $primaryKey = 'event_id';
     public $timestamps = false;
 
-    protected $fillable = ['instructor_id', 'name', 'description', 'participants_limit', 'offer_id', 'start_date', 'end_date'];
+    protected $fillable = ['instructor_id', 'name', 'description','event_color', 'participants_limit', 'offer_id', 'start_date', 'end_date'];
 
     public function instructor(): BelongsTo
     {

@@ -22,7 +22,16 @@ class NotificationController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'creator_id' => 'required|exists:users,user_id',
+            'name' => 'required|string|max:255',
+            'description' => 'required|string',
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after_or_equal:start_date',
+        ]);
+        
+        $notification = Notification::create($validated);
+        return response()->json($notification, 201);
     }
 
     /**
@@ -30,7 +39,11 @@ class NotificationController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $notification = Notification::with('creator')->find($id);
+        if ($notification) {
+            return response()->json($notification, 200);
+        }
+        return response()->json(['message' => 'Notification not found'], 404);
     }
 
     /**
@@ -38,7 +51,12 @@ class NotificationController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $notification = Notification::find($id);
+        if ($notification) {
+            $notification->update($request->all());
+            return response()->json($notification, 200);
+        }
+        return response()->json(['message' => 'Notification not found'], 404);
     }
 
     /**
@@ -46,6 +64,11 @@ class NotificationController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $notification = Notification::find($id);
+        if ($notification) {
+            $notification->delete();
+            return response()->json(['message' => 'Notification deleted'], 200);
+        }
+        return response()->json(['message' => 'Notification not found'], 404);
     }
 }

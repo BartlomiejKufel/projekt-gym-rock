@@ -22,7 +22,16 @@ class PurchaseHistoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'customer_id' => 'required|exists:users,user_id',
+            'employee_id' => 'required|exists:users,user_id',
+            'price' => 'required|numeric',
+            'purchase_date' => 'required|date',
+            'offer_id' => 'required|exists:offers,offer_id',
+        ]);
+        
+        $purchase = PurchaseHistory::create($validated);
+        return response()->json($purchase, 201);
     }
 
     /**
@@ -30,7 +39,11 @@ class PurchaseHistoryController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $purchase = PurchaseHistory::with(['customer', 'employee', 'offer'])->find($id);
+        if ($purchase) {
+            return response()->json($purchase, 200);
+        }
+        return response()->json(['message' => 'Purchase not found'], 404);
     }
 
     /**
@@ -38,7 +51,12 @@ class PurchaseHistoryController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $purchase = PurchaseHistory::find($id);
+        if ($purchase) {
+            $purchase->update($request->all());
+            return response()->json($purchase, 200);
+        }
+        return response()->json(['message' => 'Purchase not found'], 404);
     }
 
     /**
@@ -46,6 +64,11 @@ class PurchaseHistoryController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $purchase = PurchaseHistory::find($id);
+        if ($purchase) {
+            $purchase->delete();
+            return response()->json(['message' => 'Purchase deleted'], 200);
+        }
+        return response()->json(['message' => 'Purchase not found'], 404);
     }
 }

@@ -12,18 +12,19 @@ import Settings from './pages/Settings';
 
 function App() {
   const [title, setTitle] = useState("Home");
+  const [userId, setUserId] = useState(null);
   const [mainNavbarVisible, setMainNavbarVisible] = useState(true);
   const [headerVisible, setHeaderVisible] = useState(true);
   return (
     <BrowserRouter>
       {headerVisible && <Header title={title} />}
       <Routes>
-        <Route path="/" element={<Login setHeaderVisible={setHeaderVisible} setMainNavbarVisible={setMainNavbarVisible} />} />
-        <Route path="/instructors" element={<Instructors />} />
-        <Route path="/home" element={<Home />} />
-        <Route path="/statistics" element={<Statistics />} />
-        <Route path="/card" element={<Card />} />
-        <Route path="/settings" element={<Settings />} />
+        <Route path="/" element={<Login setHeaderVisible={setHeaderVisible} setMainNavbarVisible={setMainNavbarVisible} setUserId={setUserId} />} />
+        <Route path="/instructors" element={<Instructors userId={userId} />} />
+        <Route path="/home" element={<Home userId={userId} />} />
+        <Route path="/statistics" element={<Statistics userId={userId} />} />
+        <Route path="/card" element={<Card userId={userId} />} />
+        <Route path="/settings" element={<Settings userId={userId} />} />
       </Routes>
       {mainNavbarVisible && <MainNavbar setTitle={setTitle} />}
     </BrowserRouter>

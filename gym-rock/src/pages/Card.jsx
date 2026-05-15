@@ -1,7 +1,7 @@
 import "./Card.css";
 import { Container, Row } from "react-bootstrap";
 
-const Card = () => {
+const Card = ({ userId }) => {
     return (
         <Container className="mb-5 text-center mt-5">
             <Row className="mx-5">

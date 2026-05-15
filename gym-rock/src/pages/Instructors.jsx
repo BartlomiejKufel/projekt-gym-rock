@@ -5,7 +5,7 @@ import ReminderBlock from "../components/ReminderBlock"
 import { Container, Row, Col } from "react-bootstrap";
 import { useState } from "react";
 
-const Instructors = () => {
+const Instructors = ({ userId }) => {
 
   var gymHours = Array.from({ length: 13 }, (_, i) => i + 10);
   const [events, setEvents] = useState([
@@ -46,7 +46,7 @@ const Instructors = () => {
                   <Col xs={2} sm={1} className="my-1 text-end fw-medium text-muted pe-2">{hour}:00</Col>
                   <Col xs={10} sm={11} className="ps-2 pe-1">
                     {event ? (
-                      <div onClick={() => setSelectedEvent(event)} style={{cursor: "pointer"}}>
+                      <div onClick={() => setSelectedEvent(event)} style={{ cursor: "pointer" }}>
                         <EventBlock event={event} />
                       </div>
                     ) : (
@@ -87,11 +87,11 @@ const Instructors = () => {
       {selectedEvent && (
         <div className="event-modal-overlay">
           <div className="event-modal-backdrop" onClick={() => setSelectedEvent(null)}></div>
-          <div 
-            className="event-modal-panel" 
+          <div
+            className="event-modal-panel"
             style={{ backgroundColor: selectedEvent.color }}
           >
-            <div className="d-flex justify-content-center pt-3 pb-2" onClick={() => setSelectedEvent(null)} style={{cursor: "pointer"}}>
+            <div className="d-flex justify-content-center pt-3 pb-2" onClick={() => setSelectedEvent(null)} style={{ cursor: "pointer" }}>
               <div className="event-modal-handle"></div>
             </div>
             <div className="px-4 pt-3 pb-5 text-white">
@@ -100,20 +100,20 @@ const Instructors = () => {
                   <h1 className="fw-bold lh-sm mb-0">{selectedEvent.title}</h1>
                 </Col>
                 <Col xs={5} className="text-end">
-                  <img 
-                    src="/img/adam.png" 
+                  <img
+                    src="/img/adam.png"
                     alt={selectedEvent.instructor}
                     className="event-instructor-img shadow-sm"
                   />
                 </Col>
               </Row>
-              
+
               <p className="event-desc mb-5">
                 Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.
               </p>
-              
+
               <div className="d-flex justify-content-center mb-4">
-                <button 
+                <button
                   className="btn btn-light event-register-btn fw-bold px-5 py-3 shadow-sm border-0"
                   onClick={() => alert(`Registered for ${selectedEvent.title}`)}
                 >

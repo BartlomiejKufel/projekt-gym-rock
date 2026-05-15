@@ -39,7 +39,7 @@ class DatabaseSeeder extends Seeder
             ],
             [
                 'name' => 'Piotr',
-                'surname' => 'Wiśniewski',
+                'surname' => 'Wisniewski',
                 'login' => 'instruktor',
                 'password' => 'instruktor',
                 'email' => 'piotr.wisniewski@example.com',
@@ -48,7 +48,7 @@ class DatabaseSeeder extends Seeder
             ],
             [
                 'name' => 'Marta',
-                'surname' => 'Wójcik',
+                'surname' => 'Wojcik',
                 'login' => 'klient',
                 'password' => 'klient',
                 'email' => 'marta.wojcik@example.com',

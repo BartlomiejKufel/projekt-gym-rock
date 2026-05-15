@@ -2,39 +2,39 @@ import "./Home.css";
 import { Container, Row, Col, Card } from "react-bootstrap";
 
 const passes = [
-  {
-    id: 1,
-    title: "Standard",
-    badge: "BOULDERS",
-    startDate: "20.11",
-    endDate: "20.12",
-    daysLeft: 31,
-    colorClass: "text-green",
-    location: "Rzeszów"
-  },
-  {
-    id: 2,
-    title: "Extra",
-    badge: "SAUNA",
-    startDate: "20.11",
-    endDate: "27.11",
-    daysLeft: 7,
-    colorClass: "text-brown",
-    location: "Rzeszów"
-  },
-  {
-    id: 3,
-    title: "Extra",
-    badge: "MOONBOARD",
-    startDate: "20.11",
-    endDate: "2.12",
-    daysLeft: 13,
-    colorClass: "text-yellow",
-    location: "Rzeszów"
-  }
+    {
+        id: 1,
+        title: "Standard",
+        badge: "BOULDERS",
+        startDate: "20.11",
+        endDate: "20.12",
+        daysLeft: 31,
+        colorClass: "text-green",
+        location: "Rzeszów"
+    },
+    {
+        id: 2,
+        title: "Extra",
+        badge: "SAUNA",
+        startDate: "20.11",
+        endDate: "27.11",
+        daysLeft: 7,
+        colorClass: "text-brown",
+        location: "Rzeszów"
+    },
+    {
+        id: 3,
+        title: "Extra",
+        badge: "MOONBOARD",
+        startDate: "20.11",
+        endDate: "2.12",
+        daysLeft: 13,
+        colorClass: "text-yellow",
+        location: "Rzeszów"
+    }
 ];
 
-const Home = () => {
+const Home = ({ userId }) => {
     return (
         <Container className="mb-5 pt-4 home-container">
             <Row className="mx-2 mb-3">
@@ -54,7 +54,7 @@ const Home = () => {
                                         {pass.badge}
                                     </span>
                                 </div>
-                                
+
                                 <Row className="mt-2">
                                     <Col xs={6} className="d-flex flex-column align-items-start">
                                         <div className="date-container text-center mb-4">

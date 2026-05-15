@@ -8,7 +8,7 @@ const settingsLinks = [
     { id: 4, title: "Terms and Conditions" },
 ];
 
-const Settings = () => {
+const Settings = ({ userId }) => {
     const navigate = useNavigate();
     return (
         <Container className="mb-5 settings-container">

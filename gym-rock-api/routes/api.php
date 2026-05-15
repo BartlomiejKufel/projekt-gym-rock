@@ -12,6 +12,7 @@ use App\Http\Controllers\QrCardController;
 
 Route::apiResource('offers', OfferController::class);
 Route::apiResource('roles', RoleController::class);
+Route::post('users/login', [UserController::class, 'login']);
 Route::apiResource('users', UserController::class);
 Route::apiResource('events', EventController::class);
 Route::apiResource('purchases', PurchaseHistoryController::class);

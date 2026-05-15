@@ -1,13 +1,15 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Container, Form, Button, InputGroup } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import "./Login.css";
 
-const Login = ({ setHeaderVisible, setMainNavbarVisible }) => {
-    // Ukrywamy nawigację na ekranie logowania, jeśli zostały przekazane odpowiednie funkcje
+const Login = ({ setHeaderVisible, setMainNavbarVisible, setUserId }) => {
     const navigate = useNavigate();
-    useEffect(() => {
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+    const [rememberMe, setRememberMe] = useState(false);
 
+    useEffect(() => {
         if (setHeaderVisible) setHeaderVisible(false);
         if (setMainNavbarVisible) setMainNavbarVisible(false);
 
@@ -16,6 +18,35 @@ const Login = ({ setHeaderVisible, setMainNavbarVisible }) => {
             if (setMainNavbarVisible) setMainNavbarVisible(true);
         };
     }, [setHeaderVisible, setMainNavbarVisible]);
+
+    const handleLogin = async (e) => {
+        e.preventDefault();
+
+        try {
+            const response = await fetch('http://127.0.0.1:8000/api/users/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                },
+                body: JSON.stringify({
+                    login: username,
+                    password: password,
+                }),
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                setUserId(data.user_id);
+                navigate("/home");
+            } else {
+                console.error(data.message);
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
     return (
         <div className="login-page-wrapper">
@@ -32,6 +63,8 @@ const Login = ({ setHeaderVisible, setMainNavbarVisible }) => {
                                 <Form.Control
                                     type="text"
                                     className="login-input shadow-none"
+                                    value={username}
+                                    onChange={(e) => setUsername(e.target.value)}
                                 />
                                 <InputGroup.Text className="login-icon-bg">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
@@ -47,6 +80,8 @@ const Login = ({ setHeaderVisible, setMainNavbarVisible }) => {
                                 <Form.Control
                                     type="password"
                                     className="login-input shadow-none"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
                                 />
                                 <InputGroup.Text className="login-icon-bg">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
@@ -61,11 +96,13 @@ const Login = ({ setHeaderVisible, setMainNavbarVisible }) => {
                             <Form.Check
                                 type="checkbox"
                                 className="login-checkbox shadow-none"
+                                checked={rememberMe}
+                                onChange={(e) => setRememberMe(e.target.value)}
                             />
                         </Form.Group>
 
                         <div className="text-center mt-3">
-                            <Button variant="dark" type="submit" className="login-submit-btn px-5 py-2 fw-bold" onClick={() => navigate("/home")}>
+                            <Button variant="dark" type="submit" className="login-submit-btn px-5 py-2 fw-bold" onClick={handleLogin}>
                                 Log in
                             </Button>
                         </div>

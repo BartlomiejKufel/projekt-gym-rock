@@ -22,7 +22,16 @@ class EntranceController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'user_id' => 'required|exists:users,user_id',
+            'date_of_entry' => 'required|date',
+            'start_time' => 'required',
+            'end_time' => 'nullable',
+            'time_spent' => 'nullable|integer',
+        ]);
+        
+        $entrance = Entrance::create($validated);
+        return response()->json($entrance, 201);
     }
 
     /**
@@ -30,7 +39,11 @@ class EntranceController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $entrance = Entrance::with('user')->find($id);
+        if ($entrance) {
+            return response()->json($entrance, 200);
+        }
+        return response()->json(['message' => 'Entrance not found'], 404);
     }
 
     /**
@@ -38,7 +51,12 @@ class EntranceController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $entrance = Entrance::find($id);
+        if ($entrance) {
+            $entrance->update($request->all());
+            return response()->json($entrance, 200);
+        }
+        return response()->json(['message' => 'Entrance not found'], 404);
     }
 
     /**
@@ -46,6 +64,11 @@ class EntranceController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $entrance = Entrance::find($id);
+        if ($entrance) {
+            $entrance->delete();
+            return response()->json(['message' => 'Entrance deleted'], 200);
+        }
+        return response()->json(['message' => 'Entrance not found'], 404);
     }
 }

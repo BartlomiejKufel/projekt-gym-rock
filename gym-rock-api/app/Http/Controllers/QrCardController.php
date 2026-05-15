@@ -22,7 +22,12 @@ class QrCardController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'qr_code' => 'required|string|max:255',
+        ]);
+        $card = QrCard::create($validated);
+        return response()->json($card, 201);
     }
 
     /**
@@ -30,7 +35,11 @@ class QrCardController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $card = QrCard::with('user')->find($id);
+        if ($card) {
+            return response()->json($card, 200);
+        }
+        return response()->json(['message' => 'Card not found'], 404);
     }
 
     /**
@@ -38,7 +47,12 @@ class QrCardController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $card = QrCard::find($id);
+        if ($card) {
+            $card->update($request->all());
+            return response()->json($card, 200);
+        }
+        return response()->json(['message' => 'Card not found'], 404);
     }
 
     /**
@@ -46,6 +60,11 @@ class QrCardController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $card = QrCard::find($id);
+        if ($card) {
+            $card->delete();
+            return response()->json(['message' => 'Card deleted'], 200);
+        }
+        return response()->json(['message' => 'Card not found'], 404);
     }
 }
