@@ -13,9 +13,10 @@ use App\Http\Controllers\QrCardController;
 Route::apiResource('offers', OfferController::class);
 
 Route::apiResource('roles', RoleController::class);
-Route::post('users/login', [UserController::class, 'login']);
 
 Route::apiResource('users', UserController::class);
+Route::post('users/login', [UserController::class, 'login']);
+Route::get('users/profile_picture/{userId}', [UserController::class, 'showProfilePicture']);
 
 Route::apiResource('events', EventController::class);
 
@@ -25,6 +26,7 @@ Route::get('purchases/{customerId}/active', [PurchaseHistoryController::class, '
 Route::apiResource('entrances', EntranceController::class);
 Route::get('entrances/user/{userId}/streak', [EntranceController::class, 'getStreakStats']);
 Route::get('entrances/user/{userId}/weekly', [EntranceController::class, 'getWeeklyStats']);
+Route::get('entrances/user/{userId}/monthly', [EntranceController::class, 'getMonthlyStats']);
 
 Route::apiResource('notifications', NotificationController::class);
 

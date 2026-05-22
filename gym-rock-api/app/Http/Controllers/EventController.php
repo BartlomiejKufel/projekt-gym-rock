@@ -11,9 +11,16 @@ class EventController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $events = Event::with(['instructor', 'offer'])->get();
+        $query = Event::with(['instructor:user_id,name,surname']);
+
+        if ($request->filled('date')) {
+            $query->whereDate('start_date', $request->query('date'));
+        }
+
+        $events = $query->orderBy('start_date', 'asc')->get();
+
         return response()->json($events, 200);
     }
 

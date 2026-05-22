@@ -3,31 +3,70 @@ import Calendar from "../components/Calendar";
 import EventBlock from "../components/EventBlock";
 import ReminderBlock from "../components/ReminderBlock"
 import { Container, Row, Col } from "react-bootstrap";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const Instructors = ({ userId }) => {
+  const getLocalDateString = (date) => {
+    const yyyy = date.getFullYear();
+    const mm = String(date.getMonth() + 1).padStart(2, '0');
+    const dd = String(date.getDate()).padStart(2, '0');
+    return `${yyyy}-${mm}-${dd}`;
+  };
+
+  const [selectedDate, setSelectedDate] = useState(() => getLocalDateString(new Date()));
 
   var gymHours = Array.from({ length: 13 }, (_, i) => i + 10);
-  const [events, setEvents] = useState([
-    { start: 10, end: 11, title: "Training Advance", instructor: "Magnus Midtbø", color: "#4E49DE" },
-    { start: 18, end: 20, title: "BoulderMania Kids", instructor: "Janja Garnbret", color: "#DE496E" }
-  ]);
-
-  const [reminders, setReminder] = useState([
-    events[0]
-  ]);
-
+  const [events, setEvents] = useState([]);
+  const [reminders, setReminder] = useState([]);
   const [selectedEvent, setSelectedEvent] = useState(null);
+
+  useEffect(() => {
+    fetch(`http://localhost:8000/api/events?date=${selectedDate}`)
+      .then((response) => response.json())
+      .then((data) => {
+        const mapped = data.map((event) => {
+          const startParts = event.start_date.split(' ');
+          const endParts = event.end_date.split(' ');
+          const startHour = startParts[1] ? parseInt(startParts[1].split(':')[0], 10) : 10;
+          const endHour = endParts[1] ? parseInt(endParts[1].split(':')[0], 10) : 11;
+
+          return {
+            event_id: event.event_id,
+            start: startHour,
+            end: endHour,
+            title: event.name,
+            instructor: `${event.instructor.name} ${event.instructor.surname}`,
+            color: event.event_color || "#4E49DE",
+            description: event.description,
+            start_date: event.start_date,
+            end_date: event.end_date,
+            instructor_img: event.instructor_id
+              ? `http://localhost:8000/api/users/profile_picture/${event.instructor_id}`
+              : "/img/default-profile-pic.png"
+          };
+        });
+        setEvents(mapped);
+
+        if (mapped.length > 0) {
+          setReminder([mapped[0]]);
+        } else {
+          setReminder([]);
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching events:", error);
+      });
+  }, [selectedDate]);
   return (
     <Container className="mb-5 pt-4">
       <div className="mx-2 mb-4">
-        <Calendar />
+        <Calendar selectedDate={selectedDate} onSelectDate={setSelectedDate} />
       </div>
 
       <Row className="mx-2 mb-4">
         <Col xs={12} className="px-1">
           <h4 className="fw-bold text-dark-gray mb-3">
-            Schedule Today
+            Aktualny rozkład zajęć
           </h4>
         </Col>
         <ul className="px-1">
@@ -63,7 +102,7 @@ const Instructors = ({ userId }) => {
       <Row className="mx-2 mb-4">
         <Col xs={12} className="px-1">
           <h4 className="fw-bold text-dark-gray mb-3">
-            Reminders
+            Przypomnienia
           </h4>
         </Col>
 
@@ -76,7 +115,7 @@ const Instructors = ({ userId }) => {
         ) : (
           <Col xs={12} className="px-1 text-center">
             <p className="text-muted mb-4">
-              You have nothing planned!
+              Nie masz nic zaplanowane!
             </p>
           </Col>
         )}
@@ -101,7 +140,7 @@ const Instructors = ({ userId }) => {
                 </Col>
                 <Col xs={5} className="text-end">
                   <img
-                    src="/img/adam.png"
+                    src={selectedEvent.instructor_img}
                     alt={selectedEvent.instructor}
                     className="event-instructor-img shadow-sm"
                   />
@@ -109,7 +148,7 @@ const Instructors = ({ userId }) => {
               </Row>
 
               <p className="event-desc mb-5">
-                Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.
+                {selectedEvent.description || "Brak opisu dla tego wydarzenia."}
               </p>
 
               <div className="d-flex justify-content-center mb-4">
@@ -117,7 +156,7 @@ const Instructors = ({ userId }) => {
                   className="btn btn-light event-register-btn fw-bold px-5 py-3 shadow-sm border-0"
                   onClick={() => alert(`Registered for ${selectedEvent.title}`)}
                 >
-                  Register
+                  Zapisz mnie
                 </button>
               </div>
             </div>

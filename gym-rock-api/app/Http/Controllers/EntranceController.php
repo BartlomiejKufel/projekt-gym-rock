@@ -204,7 +204,7 @@ class EntranceController extends Controller
             $seconds = $totalSeconds % 60;
             $timeSpentStr = sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds);
             
-            // Decymalne godziny do wykresu (np. 1.5)
+            // Decymalne godziny do wykresu (np. 1.5) - do wykresu potem
             $decimalHours = round($totalSeconds / 3600, 2);
 
             $stats[] = [
@@ -217,5 +217,77 @@ class EntranceController extends Controller
 
         return response()->json($stats);
     }
+
+    /**
+     * Get monthly attendance statistics for the specified user (by weeks).
+     */
+    public function getMonthlyStats(string $userId)
+    {
+        $currentYear = Carbon::today()->year;
+        $currentMonth = Carbon::today()->month;
+
+        $entrances = Entrance::where('user_id', $userId)
+            ->whereYear('date_of_entry', $currentYear)
+            ->whereMonth('date_of_entry', $currentMonth)
+            ->get(['date_of_entry', 'time_spent']);
+
+        // Zsumuj czas spędzony w poszczególnych tygodniach
+        $weeklySeconds = [
+            'T1' => 0,
+            'T2' => 0,
+            'T3' => 0,
+            'T4' => 0,
+        ];
+
+        // Jeśli obecny miesiąc ma więcej niż 28 dni, dodaj 5 tydzień
+        $daysInMonth = Carbon::today()->daysInMonth;
+        if ($daysInMonth > 28) {
+            $weeklySeconds['T5'] = 0;
+        }
+
+        foreach ($entrances as $entrance) {
+            if (empty($entrance->time_spent)) {
+                continue;
+            }
+
+            $day = Carbon::parse($entrance->date_of_entry)->day;
+            
+            // Określamy, do którego tygodnia należy dany dzień
+            if ($day >= 1 && $day <= 7) {
+                $week = 'T1';
+            } elseif ($day >= 8 && $day <= 14) {
+                $week = 'T2';
+            } elseif ($day >= 15 && $day <= 21) {
+                $week = 'T3';
+            } elseif ($day >= 22 && $day <= 28) {
+                $week = 'T4';
+            } else {
+                $week = 'T5';
+            }
+
+            $parts = explode(':', $entrance->time_spent);
+            $seconds = ($parts[0] * 3600) + ($parts[1] * 60) + ($parts[2] ?? 0);
+            $weeklySeconds[$week] += $seconds;
+        }
+
+        $stats = [];
+        foreach ($weeklySeconds as $week => $totalSeconds) {
+            $hours = floor($totalSeconds / 3600);
+            $minutes = floor(($totalSeconds / 60) % 60);
+            $seconds = $totalSeconds % 60;
+            $timeSpentStr = sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds);
+            
+            $decimalHours = round($totalSeconds / 3600, 1);
+
+            $stats[] = [
+                'name' => $week,
+                'time' => $decimalHours,
+                'time_spent' => $timeSpentStr
+            ];
+        }
+
+        return response()->json($stats);
+    }
 }
+
 

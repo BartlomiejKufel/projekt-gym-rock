@@ -1,20 +1,19 @@
-import React, { useState} from "react";
+import React, { useState } from "react";
 import "./Calendar.css"
 import { Container, Row, Col, Card, Button } from "react-bootstrap";
 
-const Calendar = () => {
+const Calendar = ({ selectedDate, onSelectDate }) => {
   const today = new Date();
-  // today.setDate(today.getDate() + 1);
 
   const [currentDate, setCurrentDate] = useState(() => {
-    const passedDate = new Date(today); 
+    const passedDate = new Date(today);
     return new Date(passedDate.getFullYear(), passedDate.getMonth(), 1);
   });
 
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth();
 
-  const daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+  const daysOfWeek = ["Pon", "Wt", "Śr", "Czw", "Pt", "Sob", "Ndz"];
 
   const firstDay = new Date(year, month, 1);
   const lastDay = new Date(year, month + 1, 0);
@@ -49,9 +48,24 @@ const Calendar = () => {
     setCurrentDate(new Date(year, month + 1, 1));
   };
 
-  const handleSelectDate = (day) =>{
-    console.log(day);
-  }
+  const handleSelectDate = (day) => {
+    if (!day) return;
+    const selected = new Date(year, month, day);
+    const yyyy = selected.getFullYear();
+    const mm = String(selected.getMonth() + 1).padStart(2, '0');
+    const dd = String(selected.getDate()).padStart(2, '0');
+    const dateStr = `${yyyy}-${mm}-${dd}`;
+    if (onSelectDate) {
+      onSelectDate(dateStr);
+    }
+  };
+
+  const formatMonth = (s) => {
+    if (typeof s !== "string") return "";
+    return s.charAt(0).toUpperCase() + s.slice(1);
+  };
+
+  const selectedDateObj = selectedDate ? new Date(selectedDate) : null;
 
   return (
     <Container className="mt-2 mb-3" style={{ maxWidth: 700 }}>
@@ -65,7 +79,7 @@ const Calendar = () => {
             </Col>
 
             <Col className="text-center fw-bold">
-              {firstDay.toLocaleString("en-US", { month: "long" })} {year}
+              {formatMonth(firstDay.toLocaleString("pl-PL", { month: "long" }))} {year}
             </Col>
 
             <Col xs="auto">
@@ -91,6 +105,12 @@ const Calendar = () => {
                   month === today.getMonth() &&
                   year === today.getFullYear();
 
+                const isSelected =
+                  day && selectedDateObj &&
+                  day === selectedDateObj.getDate() &&
+                  month === selectedDateObj.getMonth() &&
+                  year === selectedDateObj.getFullYear();
+
                 return (
                   <Col key={j}>
                     <div
@@ -102,11 +122,12 @@ const Calendar = () => {
                         border: "1px solid #dee2e6",
                         borderRadius: 6,
                         boxSizing: "border-box",
-                        backgroundColor: isToday ? "#fedcdc" : "transparent",
-                        color: isToday ? "#DE496E" : "black",
-                        fontWeight: isToday ? "bold" : "normal",
+                        backgroundColor: isSelected ? "#DE496E" : (isToday ? "#fedcdc" : "transparent"),
+                        color: isSelected ? "white" : (isToday ? "#DE496E" : "black"),
+                        fontWeight: (isSelected || isToday) ? "bold" : "normal",
+                        cursor: day ? "pointer" : "default"
                       }}
-                      onClick={handleSelectDate(day)}
+                      onClick={() => handleSelectDate(day)}
                     >
                       {day || ""}
                     </div>

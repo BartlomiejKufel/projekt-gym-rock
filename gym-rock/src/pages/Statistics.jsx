@@ -3,13 +3,6 @@ import { Container, Row, Col, Dropdown, Card as BootstrapCard } from "react-boot
 import { useState, useEffect } from "react";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
-const monthStats = [
-    { name: 'W1', time: 14, formattedTime: "14h 00min" },
-    { name: 'W2', time: 12, formattedTime: "12h 00min" },
-    { name: 'W3', time: 16, formattedTime: "16h 00min" },
-    { name: 'W4', time: 18, formattedTime: "18h 00min" },
-];
-
 const CustomTooltip = ({ active, payload }) => {
     if (active && payload && payload.length) {
         return (
@@ -32,7 +25,13 @@ const Statistics = ({ userId }) => {
         { name: 'Sob', time: 0, formattedTime: "0h 00min" },
         { name: 'Ndz', time: 0, formattedTime: "0h 00min" },
     ]);
-    const data = view === "Tydzień" ? weeklyData : monthStats;
+    const [monthlyData, setMonthlyData] = useState([
+        { name: 'T1', time: 0, formattedTime: "0h 00min" },
+        { name: 'T2', time: 0, formattedTime: "0h 00min" },
+        { name: 'T3', time: 0, formattedTime: "0h 00min" },
+        { name: 'T4', time: 0, formattedTime: "0h 00min" },
+    ]);
+    const data = view === "Tydzień" ? weeklyData : monthlyData;
     const [totalTime, setTotalTime] = useState("00:00:00");
     const [streak, setStreak] = useState(0);
 
@@ -59,6 +58,22 @@ const Statistics = ({ userId }) => {
         }
     }
 
+    async function getMonthlyData() {
+        try {
+            const response = await fetch(`http://localhost:8000/api/entrances/user/${userId}/monthly`);
+            const data = await response.json();
+            if (Array.isArray(data)) {
+                const formatted = data.map(item => ({
+                    ...item,
+                    formattedTime: formatTime(item.time_spent)
+                }));
+                setMonthlyData(formatted);
+            }
+        } catch (error) {
+            console.error("Error fetching monthly data:", error);
+        }
+    }
+
     function formatTime(time) {
         if (!time || typeof time !== 'string') {
             return "0h 00min";
@@ -73,6 +88,7 @@ const Statistics = ({ userId }) => {
     useEffect(() => {
         getStreakData();
         getWeeklyData();
+        getMonthlyData();
     }, []);
 
     return (
