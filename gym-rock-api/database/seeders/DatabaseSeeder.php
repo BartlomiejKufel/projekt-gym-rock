@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use App\Models\Role;
 use App\Models\User;
+use App\Models\Offer;
 use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
@@ -23,7 +24,7 @@ class DatabaseSeeder extends Seeder
                 'name' => 'Jan',
                 'surname' => 'Kowalski',
                 'login' => 'admin',
-                'password' => 'admin',
+                'password' => Hash::make('admin'),
                 'email' => 'jan.kowalski@example.com',
                 'date_of_birth' => '1985-04-12',
                 'role_id' => 1,
@@ -32,7 +33,7 @@ class DatabaseSeeder extends Seeder
                 'name' => 'Anna',
                 'surname' => 'Nowak',
                 'login' => 'pracownik',
-                'password' => 'pracownik',
+                'password' => Hash::make('pracownik'),
                 'email' => 'anna.nowak@example.com',
                 'date_of_birth' => '1992-11-23',
                 'role_id' => 2,
@@ -41,7 +42,7 @@ class DatabaseSeeder extends Seeder
                 'name' => 'Piotr',
                 'surname' => 'Wisniewski',
                 'login' => 'instruktor',
-                'password' => 'instruktor',
+                'password' => Hash::make('instruktor'),
                 'email' => 'piotr.wisniewski@example.com',
                 'date_of_birth' => '1995-07-08',
                 'role_id' => 3,
@@ -50,7 +51,7 @@ class DatabaseSeeder extends Seeder
                 'name' => 'Marta',
                 'surname' => 'Wojcik',
                 'login' => 'klient',
-                'password' => 'klient',
+                'password' => Hash::make('klient'),
                 'email' => 'marta.wojcik@example.com',
                 'date_of_birth' => '2002-02-15',
                 'role_id' => 4,

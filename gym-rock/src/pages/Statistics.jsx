@@ -1,17 +1,7 @@
 import "./Statistics.css";
 import { Container, Row, Col, Dropdown, Card as BootstrapCard } from "react-bootstrap";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-
-const weekStats = [
-    { name: 'Mon', time: 3, formattedTime: "3h 00min" },
-    { name: 'Tue', time: 3.8, formattedTime: "3h 48min" },
-    { name: 'Wed', time: 2.7, formattedTime: "2h 42min" },
-    { name: 'Thu', time: 3.5, formattedTime: "3h 30min" },
-    { name: 'Fri', time: 4.6, formattedTime: "4h 36min" },
-    { name: 'Sat', time: 3.4, formattedTime: "3h 24min" },
-    { name: 'Sun', time: 5.1, formattedTime: "5h 06min" },
-];
 
 const monthStats = [
     { name: 'W1', time: 14, formattedTime: "14h 00min" },
@@ -32,14 +22,64 @@ const CustomTooltip = ({ active, payload }) => {
 };
 
 const Statistics = ({ userId }) => {
-    const [view, setView] = useState("Weekly");
-    const data = view === "Weekly" ? weekStats : monthStats;
+    const [view, setView] = useState("Tydzień");
+    const [weeklyData, setWeeklyData] = useState([
+        { name: 'Pon', time: 0, formattedTime: "0h 00min" },
+        { name: 'Wt', time: 0, formattedTime: "0h 00min" },
+        { name: 'Śr', time: 0, formattedTime: "0h 00min" },
+        { name: 'Czw', time: 0, formattedTime: "0h 00min" },
+        { name: 'Pt', time: 0, formattedTime: "0h 00min" },
+        { name: 'Sob', time: 0, formattedTime: "0h 00min" },
+        { name: 'Ndz', time: 0, formattedTime: "0h 00min" },
+    ]);
+    const data = view === "Tydzień" ? weeklyData : monthStats;
+    const [totalTime, setTotalTime] = useState("00:00:00");
+    const [streak, setStreak] = useState(0);
+
+    async function getStreakData() {
+        const response = await fetch(`http://localhost:8000/api/entrances/user/${userId}/streak`);
+        const data = await response.json();
+        setStreak(data.days_in_a_row);
+        setTotalTime(data.total_time_spent);
+    }
+
+    async function getWeeklyData() {
+        try {
+            const response = await fetch(`http://localhost:8000/api/entrances/user/${userId}/weekly`);
+            const data = await response.json();
+            if (Array.isArray(data)) {
+                const formatted = data.map(item => ({
+                    ...item,
+                    formattedTime: formatTime(item.time_spent)
+                }));
+                setWeeklyData(formatted);
+            }
+        } catch (error) {
+            console.error("Error fetching weekly data:", error);
+        }
+    }
+
+    function formatTime(time) {
+        if (!time || typeof time !== 'string') {
+            return "0h 00min";
+        }
+        const parts = time.split(':');
+        const hours = parts[0];
+        const minutes = parts[1] || "00";
+        return `${hours}h ${minutes}min`;
+    }
+
+
+    useEffect(() => {
+        getStreakData();
+        getWeeklyData();
+    }, []);
 
     return (
         <Container className="mb-5 stats-container pt-4">
             <Row className="mx-4 mb-4 d-flex justify-content-between align-items-center">
                 <Col xs="auto">
-                    <h3 className="fw-bold mb-0 text-dark-gray">Presence</h3>
+                    <h3 className="fw-bold mb-0 text-dark-gray">Obecność</h3>
                 </Col>
                 <Col xs="auto">
                     <Dropdown>
@@ -48,8 +88,8 @@ const Statistics = ({ userId }) => {
                         </Dropdown.Toggle>
 
                         <Dropdown.Menu>
-                            <Dropdown.Item onClick={() => setView("Weekly")}>Weekly</Dropdown.Item>
-                            <Dropdown.Item onClick={() => setView("Monthly")}>Monthly</Dropdown.Item>
+                            <Dropdown.Item onClick={() => setView("Tydzień")}>Tydzień</Dropdown.Item>
+                            <Dropdown.Item onClick={() => setView("Miesiąc")}>Miesiąc</Dropdown.Item>
                         </Dropdown.Menu>
                     </Dropdown>
                 </Col>
@@ -91,8 +131,8 @@ const Statistics = ({ userId }) => {
                                 </svg>
                             </div>
                             <div>
-                                <h5 className="fw-bold mb-0">16h 32min</h5>
-                                <small className="text-muted">Total Time</small>
+                                <h5 className="fw-bold mb-0">{formatTime(totalTime)}</h5>
+                                <small className="text-muted">Całkowity czas</small>
                             </div>
                         </BootstrapCard.Body>
                     </BootstrapCard>
@@ -106,8 +146,8 @@ const Statistics = ({ userId }) => {
                                 </svg>
                             </div>
                             <div>
-                                <h5 className="fw-bold mb-0">7</h5>
-                                <small className="text-muted">Days Streak</small>
+                                <h5 className="fw-bold mb-0">{streak}</h5>
+                                <small className="text-muted">Seria dni</small>
                             </div>
                         </BootstrapCard.Body>
                     </BootstrapCard>

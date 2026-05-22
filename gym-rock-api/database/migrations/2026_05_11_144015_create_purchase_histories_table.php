@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('purchase_histories', function (Blueprint $table) {
+        Schema::create('purchase_history', function (Blueprint $table) {
             $table->id('purchase_id');
             $table->foreignId('customer_id')->nullable()->constrained('users', 'user_id')->nullOnDelete();
             $table->foreignId('employee_id')->nullable()->constrained('users', 'user_id')->nullOnDelete();
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('purchase_histories');
+        Schema::dropIfExists('purchase_history');
     }
 };

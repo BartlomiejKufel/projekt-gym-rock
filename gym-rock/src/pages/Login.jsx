@@ -75,7 +75,7 @@ const Login = ({ setHeaderVisible, setMainNavbarVisible, setUserId }) => {
                         </Form.Group>
 
                         <Form.Group className="mb-4" controlId="formBasicPassword">
-                            <Form.Label className="login-label fw-bold">Password</Form.Label>
+                            <Form.Label className="login-label fw-bold">Hasło</Form.Label>
                             <InputGroup>
                                 <Form.Control
                                     type="password"
@@ -92,7 +92,7 @@ const Login = ({ setHeaderVisible, setMainNavbarVisible, setUserId }) => {
                         </Form.Group>
 
                         <Form.Group className="mb-4 d-flex justify-content-center align-items-center" controlId="formBasicCheckbox">
-                            <Form.Label className="mb-0 me-2 login-remember-label">Remember me</Form.Label>
+                            <Form.Label className="mb-0 me-2 login-remember-label">Zapamiętaj mnie</Form.Label>
                             <Form.Check
                                 type="checkbox"
                                 className="login-checkbox shadow-none"
@@ -103,7 +103,7 @@ const Login = ({ setHeaderVisible, setMainNavbarVisible, setUserId }) => {
 
                         <div className="text-center mt-3">
                             <Button variant="dark" type="submit" className="login-submit-btn px-5 py-2 fw-bold" onClick={handleLogin}>
-                                Log in
+                                Zaloguj
                             </Button>
                         </div>
                     </Form>

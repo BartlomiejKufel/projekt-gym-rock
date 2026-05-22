@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\PurchaseHistory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PurchaseHistoryController extends Controller
 {
@@ -44,6 +45,28 @@ class PurchaseHistoryController extends Controller
             return response()->json($purchase, 200);
         }
         return response()->json(['message' => 'Purchase not found'], 404);
+    }
+
+    public function showActiveOffers(string $customerId)
+    {
+        $activePurchases = PurchaseHistory::query()
+            ->select(
+                'purchase_history.purchase_id as purchase_id',
+                'purchase_history.purchase_date',
+                'offers.name as offer_name',
+                DB::raw('DATE_ADD(purchase_history.purchase_date, INTERVAL offers.duration DAY) as valid_until'),
+                DB::raw('DATEDIFF(DATE_ADD(purchase_history.purchase_date, INTERVAL offers.duration DAY), NOW()) as days_left')
+            )
+            ->join('offers', 'purchase_history.offer_id', '=', 'offers.offer_id')
+            ->where('purchase_history.customer_id', $customerId)
+            ->whereRaw('DATE_ADD(purchase_history.purchase_date, INTERVAL offers.duration DAY) >= NOW()')
+            ->get();
+
+        if ($activePurchases->isNotEmpty()) {
+            return response()->json($activePurchases, 200);
+        }
+
+        return response()->json(['message' => 'No active offers found'], 404);
     }
 
     /**

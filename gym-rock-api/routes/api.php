@@ -11,11 +11,22 @@ use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\QrCardController;
 
 Route::apiResource('offers', OfferController::class);
+
 Route::apiResource('roles', RoleController::class);
 Route::post('users/login', [UserController::class, 'login']);
+
 Route::apiResource('users', UserController::class);
+
 Route::apiResource('events', EventController::class);
+
 Route::apiResource('purchases', PurchaseHistoryController::class);
+Route::get('purchases/{customerId}/active', [PurchaseHistoryController::class, 'showActiveOffers']);
+
 Route::apiResource('entrances', EntranceController::class);
+Route::get('entrances/user/{userId}/streak', [EntranceController::class, 'getStreakStats']);
+Route::get('entrances/user/{userId}/weekly', [EntranceController::class, 'getWeeklyStats']);
+
 Route::apiResource('notifications', NotificationController::class);
+
 Route::apiResource('qrcards', QrCardController::class);
+Route::get('qrcards/user/{userId}', [QrCardController::class, 'showByUserId']);
