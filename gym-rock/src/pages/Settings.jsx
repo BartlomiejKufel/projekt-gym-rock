@@ -12,7 +12,7 @@ const settingsLinks = [
     { id: 6, title: "Kontakt", link: "#" },
 ];
 
-const Settings = ({ userId }) => {
+const Settings = ({ userId, setUserId }) => {
     const [user, setUser] = useState({});
 
     useEffect(() => {
@@ -60,7 +60,11 @@ const Settings = ({ userId }) => {
 
             <Row className="justify-content-center mt-5 mb-5">
                 <Col xs="auto">
-                    <Button variant="danger" className="logout-btn fw-bold px-5 py-2 shadow-sm border-0" onClick={() => navigate("/")}>
+                    <Button variant="danger" className="logout-btn fw-bold px-5 py-2 shadow-sm border-0" onClick={() => {
+                        localStorage.removeItem('userId');
+                        if (setUserId) setUserId(null);
+                        navigate("/");
+                    }}>
                         Wyloguj się
                     </Button>
                 </Col>

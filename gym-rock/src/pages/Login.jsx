@@ -13,11 +13,16 @@ const Login = ({ setHeaderVisible, setMainNavbarVisible, setUserId }) => {
         if (setHeaderVisible) setHeaderVisible(false);
         if (setMainNavbarVisible) setMainNavbarVisible(false);
 
+        const savedUserId = localStorage.getItem('userId');
+        if (savedUserId) {
+            navigate("/home");
+        }
+
         return () => {
             if (setHeaderVisible) setHeaderVisible(true);
             if (setMainNavbarVisible) setMainNavbarVisible(true);
         };
-    }, [setHeaderVisible, setMainNavbarVisible]);
+    }, [setHeaderVisible, setMainNavbarVisible, navigate]);
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -38,6 +43,11 @@ const Login = ({ setHeaderVisible, setMainNavbarVisible, setUserId }) => {
             const data = await response.json();
 
             if (response.ok) {
+                if (rememberMe) {
+                    localStorage.setItem('userId', data.user_id);
+                } else {
+                    localStorage.removeItem('userId');
+                }
                 setUserId(data.user_id);
                 navigate("/home");
             } else {
@@ -97,7 +107,7 @@ const Login = ({ setHeaderVisible, setMainNavbarVisible, setUserId }) => {
                                 type="checkbox"
                                 className="login-checkbox shadow-none"
                                 checked={rememberMe}
-                                onChange={(e) => setRememberMe(e.target.value)}
+                                onChange={(e) => setRememberMe(e.target.checked)}
                             />
                         </Form.Group>
 

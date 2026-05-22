@@ -19,7 +19,9 @@ const ProtectedRoute = ({ userId, children }) => {
 
 function App() {
   const [title, setTitle] = useState("Home");
-  const [userId, setUserId] = useState(null);
+  const [userId, setUserId] = useState(() => {
+    return localStorage.getItem('userId') || null;
+  });
   const [mainNavbarVisible, setMainNavbarVisible] = useState(true);
   const [headerVisible, setHeaderVisible] = useState(true);
   return (
@@ -31,7 +33,7 @@ function App() {
         <Route path="/home" element={<ProtectedRoute userId={userId}><Home userId={userId} /></ProtectedRoute>} />
         <Route path="/statistics" element={<ProtectedRoute userId={userId}><Statistics userId={userId} /></ProtectedRoute>} />
         <Route path="/card" element={<ProtectedRoute userId={userId}><Card userId={userId} /></ProtectedRoute>} />
-        <Route path="/settings" element={<ProtectedRoute userId={userId}><Settings userId={userId} /></ProtectedRoute>} />
+        <Route path="/settings" element={<ProtectedRoute userId={userId}><Settings userId={userId} setUserId={setUserId} /></ProtectedRoute>} />
       </Routes>
       {mainNavbarVisible && <MainNavbar setTitle={setTitle} />}
     </BrowserRouter>
