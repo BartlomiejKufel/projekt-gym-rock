@@ -64,6 +64,7 @@ const Instructors = ({ userId }) => {
 
           return {
             event_id: event.event_id,
+            registration_limit: event.end_date,
             start: startHour,
             end: endHour,
             title: event.name,
@@ -81,6 +82,11 @@ const Instructors = ({ userId }) => {
         console.error("Error fetching events:", error);
       });
   }, [selectedDate]);
+
+  const isPastLimit = (registration_limit) => {
+    let limitDate = registration_limit.replace(' ', 'T')
+    return new Date() > new Date(limitDate);
+  }
 
   return (
     <Container className="mb-5 pt-4">
@@ -145,6 +151,7 @@ const Instructors = ({ userId }) => {
           </Col>
         )}
       </Row>
+
       {/* Placeholder żeby MainNavbar dobrze się pokazywał na dole strony */}
       <Row style={{ height: "15vh" }}></Row>
 
@@ -172,7 +179,7 @@ const Instructors = ({ userId }) => {
                 </Col>
               </Row>
 
-              <p className="event-desc mb-5">
+              <p className="event-desc mb-4">
                 {selectedEvent.description || "Brak opisu dla tego wydarzenia."}
               </p>
 
@@ -180,8 +187,9 @@ const Instructors = ({ userId }) => {
                 <button
                   className="btn btn-light event-register-btn fw-bold px-5 py-3 shadow-sm border-0"
                   onClick={() => alert(`Registered for ${selectedEvent.title}`)}
+                  disabled={isPastLimit(selectedEvent.registration_limit)}
                 >
-                  Zapisz mnie
+                  {isPastLimit(selectedEvent.registration_limit) ? "Zapisy zamknięte" : "Zapisz mnie"}
                 </button>
               </div>
             </div>

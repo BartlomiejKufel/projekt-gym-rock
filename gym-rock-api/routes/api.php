@@ -27,6 +27,7 @@ Route::get('users/{userId}/registered-events', [EventParticipantController::clas
 
 Route::apiResource('purchases', PurchaseHistoryController::class);
 Route::get('purchases/{customerId}/active', [PurchaseHistoryController::class, 'showActiveOffers']);
+Route::get('purchases/user/{userId}', [PurchaseHistoryController::class, 'getUserPurchases']);
 
 Route::apiResource('entrances', EntranceController::class);
 Route::get('entrances/user/{userId}/streak', [EntranceController::class, 'getStreakStats']);

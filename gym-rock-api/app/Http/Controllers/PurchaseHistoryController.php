@@ -15,6 +15,10 @@ class PurchaseHistoryController extends Controller
     public function index()
     {
         $history = PurchaseHistory::with(['customer', 'employee', 'offer'])->get();
+        $history->each(function ($purchase) {
+            $purchase->customer?->makeHidden('profile_picture');
+            $purchase->employee?->makeHidden('profile_picture');
+        });
         return response()->json($history, 200);
     }
 
@@ -42,7 +46,9 @@ class PurchaseHistoryController extends Controller
     {
         $purchase = PurchaseHistory::with(['customer', 'employee', 'offer'])->find($id);
         if ($purchase) {
-            return response()->json($purchase, 200);
+             $purchase->customer?->makeHidden('profile_picture');
+             $purchase->employee?->makeHidden('profile_picture');
+             return response()->json($purchase, 200);
         }
         return response()->json(['message' => 'Purchase not found'], 404);
     }
@@ -67,6 +73,16 @@ class PurchaseHistoryController extends Controller
         }
 
         return response()->json(['message' => 'No active offers found'], 404);
+    }
+
+    public function getUserPurchases(string $userId)
+    {
+        $history = PurchaseHistory::with(['offer'])
+            ->where('customer_id', $userId)
+            ->orderBy('purchase_date', 'desc')
+            ->get();
+
+        return response()->json($history, 200);
     }
 
     /**

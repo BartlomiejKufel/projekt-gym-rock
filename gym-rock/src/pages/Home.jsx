@@ -50,7 +50,7 @@ const Home = ({ userId }) => {
                             <Card className="pass-card border-0 shadow-sm rounded-4">
                                 <Card.Body className="p-4">
                                     <Row>
-                                        <Col xs={6} className="d-flex flex-column align-items-start">
+                                        <Col xs={8} className="d-flex flex-column align-items-start">
                                             <div className="d-flex justify-content-between align-items-center mb-3">
                                                 <h4 className="fw-bold mb-0 pass-title">{pass.offer_name}</h4>
                                             </div>
@@ -67,11 +67,12 @@ const Home = ({ userId }) => {
                                                 <small className="fw-medium text-dark-gray location-text">Rzeszów</small>
                                             </div>
                                         </Col>
-                                        <Col xs={6} className="d-flex flex-column align-items-center justify-content-center">
+                                        <Col xs={4} className="d-flex flex-column align-items-center justify-content-center">
+                                            <span className={`pass-days-text ${passesLimitColors(pass.days_left)}`}>Pozostało</span>
                                             <div className={`fw-bold mb-0 pass-days-number ${passesLimitColors(pass.days_left)}`}>
                                                 {pass.days_left}
                                             </div>
-                                            <span className={`pass-days-text ${passesLimitColors(pass.days_left)}`}>days left</span>
+                                            <span className={`pass-days-text ${passesLimitColors(pass.days_left)}`}>dni</span>
                                         </Col>
                                     </Row>
                                 </Card.Body>

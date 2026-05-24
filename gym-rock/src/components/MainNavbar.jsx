@@ -2,7 +2,7 @@ import "./MainNavbar.css";
 import { Container, Nav, Navbar, Button } from "react-bootstrap";
 import { Link, useLocation } from 'react-router-dom';
 
-const MainNavbar = ({ setTitle }) => {
+const MainNavbar = () => {
   const location = useLocation();
   const activeTab = location.pathname;
 
@@ -14,7 +14,6 @@ const MainNavbar = ({ setTitle }) => {
             as={Link}
             to="/home"
             className={activeTab === "/home" ? "active-link" : ""}
-            onClick={() => setTitle("Home")}
           >
             <img
               src={activeTab === "/home" ? "./icons/home-white.svg" : "./icons/home-gray.svg"}
@@ -27,7 +26,6 @@ const MainNavbar = ({ setTitle }) => {
             as={Link}
             to="/statistics"
             className={activeTab === "/statistics" ? "active-link" : ""}
-            onClick={() => setTitle("Statystyki")}
           >
             <img
               src={activeTab === "/statistics" ? "./icons/statistics-white.svg" : "./icons/statistics-gray.svg"}
@@ -40,7 +38,6 @@ const MainNavbar = ({ setTitle }) => {
             as={Link}
             to="/instructors"
             className={activeTab === "/instructors" ? "active-link" : ""}
-            onClick={() => setTitle("Wydarzenia")}
           >
             <img
               src={activeTab === "/instructors" ? "./icons/instructors-white.svg" : "./icons/instructors-gray.svg"}
@@ -53,7 +50,6 @@ const MainNavbar = ({ setTitle }) => {
             as={Link}
             to="/card"
             className={activeTab === "/card" ? "active-link" : ""}
-            onClick={() => setTitle("Karta")}
           >
             <img
               src={activeTab === "/card" ? "./icons/card-white.svg" : "./icons/card-gray.svg"}

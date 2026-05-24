@@ -31,15 +31,16 @@ const Statistics = ({ userId }) => {
         { name: 'T3', time: 0, formattedTime: "0h 00min" },
         { name: 'T4', time: 0, formattedTime: "0h 00min" },
     ]);
-    const data = view === "Tydzień" ? weeklyData : monthlyData;
-    const [totalTime, setTotalTime] = useState("00:00:00");
+    const [weeklyTotalTime, setWeeklyTotalTime] = useState("00:00:00");
+    const [monthlyTotalTime, setMonthlyTotalTime] = useState("00:00:00");
     const [streak, setStreak] = useState(0);
+    const data = view === "Tydzień" ? weeklyData : monthlyData;
+    const activeTotalTime = view === "Tydzień" ? weeklyTotalTime : monthlyTotalTime;
 
     async function getStreakData() {
         const response = await fetch(`http://localhost:8000/api/entrances/user/${userId}/streak`);
         const data = await response.json();
         setStreak(data.days_in_a_row);
-        setTotalTime(data.total_time_spent);
     }
 
     async function getWeeklyData() {
@@ -52,6 +53,7 @@ const Statistics = ({ userId }) => {
                     formattedTime: formatTime(item.time_spent)
                 }));
                 setWeeklyData(formatted);
+                setWeeklyTotalTime(calculateTotalTime(data));
             }
         } catch (error) {
             console.error("Error fetching weekly data:", error);
@@ -68,6 +70,7 @@ const Statistics = ({ userId }) => {
                     formattedTime: formatTime(item.time_spent)
                 }));
                 setMonthlyData(formatted);
+                setMonthlyTotalTime(calculateTotalTime(data));
             }
         } catch (error) {
             console.error("Error fetching monthly data:", error);
@@ -82,6 +85,24 @@ const Statistics = ({ userId }) => {
         const hours = parts[0];
         const minutes = parts[1] || "00";
         return `${hours}h ${minutes}min`;
+    }
+
+    function calculateTotalTime(records) {
+        if (!Array.isArray(records)) return "00:00:00";
+        let totalSeconds = 0;
+        records.forEach(item => {
+            if (item.time_spent) {
+                const parts = item.time_spent.split(':');
+                const h = parseInt(parts[0], 10) || 0;
+                const m = parseInt(parts[1], 10) || 0;
+                const s = parseInt(parts[2], 10) || 0;
+                totalSeconds += h * 3600 + m * 60 + s;
+            }
+        });
+        const hours = Math.floor(totalSeconds / 3600);
+        const minutes = Math.floor((totalSeconds % 3600) / 60);
+        const seconds = totalSeconds % 60;
+        return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
     }
 
 
@@ -147,7 +168,9 @@ const Statistics = ({ userId }) => {
                                 </svg>
                             </div>
                             <div>
-                                <h5 className="fw-bold mb-0">{formatTime(totalTime)}</h5>
+                                <h5 className="fw-bold mb-0">
+                                    {activeTotalTime === "00:00:00" ? "Brak czasu" : formatTime(activeTotalTime)}
+                                </h5>
                                 <small className="text-muted">Całkowity czas</small>
                             </div>
                         </BootstrapCard.Body>

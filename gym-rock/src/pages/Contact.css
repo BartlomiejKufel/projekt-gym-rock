@@ -1,0 +1,68 @@
+/* Contact.css */
+.contact-container {
+    min-height: 80vh;
+}
+
+.text-dark-gray {
+    color: #4a4d52;
+}
+
+.back-btn {
+    border: none;
+    background: none;
+    color: #4a4d52;
+    padding: 0;
+    cursor: pointer;
+    transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.back-btn:hover {
+    color: #1a1c1e;
+    transform: translateX(-3px);
+}
+
+.contact-card {
+    border-radius: 20px !important;
+}
+
+.contact-icon-bg {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+}
+
+.bg-blue-light {
+    background-color: #eff6ff;
+}
+
+.bg-purple-light {
+    background-color: #f5f3ff;
+}
+
+.bg-red-light {
+    background-color: #fef2f2;
+}
+
+.bg-green-light {
+    background-color: #ecfdf5;
+}
+
+.tracking-wider {
+    letter-spacing: 0.8px;
+}
+
+.font-xs {
+    font-size: 0.75rem;
+}
+
+.transition-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.transition-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.03) !important;
+}

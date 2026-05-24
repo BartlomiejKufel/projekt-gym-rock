@@ -72,13 +72,15 @@ const Header = ({ title, setMainNavbarVisible, userId }) => {
   }, [userId]);
 
   useEffect(() => {
-    if (isSettings) {
+    const illegalLocations = ["/settings", "/purchase-history", "/profile-edit", "/contact"];
+
+    if (illegalLocations.includes(location.pathname)) {
       setMainNavbarVisible(false);
     }
     else {
       setMainNavbarVisible(true);
     }
-  }, [isSettings]);
+  }, [location.pathname]);
 
 
   return (

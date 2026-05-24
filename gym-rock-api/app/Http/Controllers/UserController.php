@@ -75,6 +75,7 @@ class UserController extends Controller
                 $data['password'] = bcrypt($data['password']);
             }
             $user->update($data);
+            $user->makeHidden('profile_picture');
             return response()->json($user, 200);
         }
         return response()->json(['message' => 'User not found'], 404);

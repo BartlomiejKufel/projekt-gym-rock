@@ -1,0 +1,84 @@
+/* ProfileEdit.css */
+.profile-edit-container {
+    min-height: 80vh;
+}
+
+.text-dark-gray {
+    color: #4a4d52;
+}
+
+.back-btn {
+    border: none;
+    background: none;
+    color: #4a4d52;
+    padding: 0;
+    cursor: pointer;
+    transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.back-btn:hover {
+    color: #1a1c1e;
+    transform: translateX(-3px);
+}
+
+.profile-edit-img-wrapper {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 4px solid #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f7fafc;
+}
+
+.profile-edit-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.change-photo-label {
+    color: #4E49DE;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: color 0.2s ease;
+}
+
+.change-photo-label:hover {
+    color: #3b36c7;
+    text-decoration: underline;
+}
+
+.edit-input {
+    border: 1px solid #edf2f7;
+    background-color: #f7fafc;
+    padding: 0.75rem 1rem;
+    font-size: 0.95rem;
+    color: #2d3748;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.edit-input:focus {
+    border-color: #4E49DE;
+    background-color: #fff;
+    box-shadow: 0 0 0 3px rgba(78, 73, 222, 0.15) !important;
+}
+
+.save-profile-btn {
+    background-color: #4E49DE !important;
+    border-color: #4E49DE !important;
+    font-size: 1rem;
+    transition: transform 0.2s ease, background-color 0.2s ease !important;
+}
+
+.save-profile-btn:hover:not(:disabled) {
+    background-color: #3b36c7 !important;
+    border-color: #3b36c7 !important;
+    transform: scale(1.02);
+}
+
+.save-profile-btn:active:not(:disabled) {
+    transform: scale(0.98);
+}

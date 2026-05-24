@@ -1,15 +1,15 @@
 import "./Settings.css";
 import { Container, Row, Col, Card, Button } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 const settingsLinks = [
-    { id: 1, title: "Historia zakupów", link: "#" },
-    { id: 2, title: "Zmiana danych", link: "#" },
+    { id: 1, title: "Historia zakupów", link: "/purchase-history" },
+    { id: 2, title: "Zmiana danych", link: "/profile-edit" },
     { id: 3, title: "Oświadczenie osoby pełnoletniej", link: "https://flywall.pl/wp-content/uploads/2024/10/1-OSWIADCZENIE-OSOBY-PELNOLETNIEJ.pdf" },
     { id: 4, title: "Jednorazowa Zgoda i Oświadczenie rodzica/opiekuna (osoby małoletnie do 16 lat)", link: "https://flywall.pl/wp-content/uploads/2024/10/2-JEDNORAZOWA-ZGODA-RODZICA-OPIEKUNA-MALOLETNIEGO-DO-LAT-16.pdf" },
     { id: 5, title: "Regulamin", link: "https://flywall.pl/wp-content/uploads/2024/10/REGULAMIN-FLYWALL.pdf" },
-    { id: 6, title: "Kontakt", link: "#" },
+    { id: 6, title: "Kontakt", link: "/contact" },
 ];
 
 const Settings = ({ userId, setUserId }) => {
@@ -42,18 +42,33 @@ const Settings = ({ userId, setUserId }) => {
             <Row className="justify-content-center mt-4 mx-1">
                 <Col xs={12} md={8} lg={6}>
                     <div className="settings-links d-flex flex-column gap-3">
-                        {settingsLinks.map((link) => (
-                            <Card key={link.id} className="border-0 shadow-sm rounded-4 settings-link-card">
-                                <a href={link.link} className="text-decoration-none">
-                                    <Card.Body className="p-3 px-4 d-flex justify-content-between align-items-center">
-                                        <span className="fw-bold text-dark-gray">{link.title}</span>
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" stroke="#4a4d52" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
-                                            <polyline points="9 18 15 12 9 6"></polyline>
-                                        </svg>
-                                    </Card.Body>
-                                </a>
-                            </Card>
-                        ))}
+                        {settingsLinks.map((link) => {
+                            const isExternal = link.link.startsWith("http") || link.link === "#";
+
+                            return (
+                                <Card key={link.id} className="border-0 shadow-sm rounded-4 settings-link-card">
+                                    {isExternal ? (
+                                        <a href={link.link} className="text-decoration-none" target={link.link.startsWith("http") ? "_blank" : ""}>
+                                            <Card.Body className="p-3 px-4 d-flex justify-content-between align-items-center">
+                                                <span className="fw-bold text-dark-gray">{link.title}</span>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" stroke="#4a4d52" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
+                                                    <polyline points="9 18 15 12 9 6"></polyline>
+                                                </svg>
+                                            </Card.Body>
+                                        </a>
+                                    ) : (
+                                        <Link to={link.link} className="text-decoration-none">
+                                            <Card.Body className="p-3 px-4 d-flex justify-content-between align-items-center">
+                                                <span className="fw-bold text-dark-gray">{link.title}</span>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" stroke="#4a4d52" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
+                                                    <polyline points="9 18 15 12 9 6"></polyline>
+                                                </svg>
+                                            </Card.Body>
+                                        </Link>
+                                    )}
+                                </Card>
+                            );
+                        })}
                     </div>
                 </Col>
             </Row>
@@ -72,7 +87,7 @@ const Settings = ({ userId, setUserId }) => {
 
             {/* Placeholder żeby MainNavbar dobrze się pokazywał na dole strony */}
             <Row style={{ height: "15vh" }}></Row>
-        </Container>
+        </Container >
     );
 };
 
