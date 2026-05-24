@@ -14,6 +14,24 @@ class NotificationController extends Controller
     public function index()
     {
         $notifications = Notification::with('creator')->get();
+        $notifications->each(function ($notification) {
+            $notification->creator?->makeHidden('profile_picture');
+        });
+        return response()->json($notifications, 200);
+    }
+
+    /**
+     * Get active notifications.
+     */
+    public function active()
+    {
+        $now = now();
+        $notifications = Notification::where('start_date', '<=', $now)->where('end_date', '>=', $now)->get();
+
+        // $notifications->each(function ($notification) {
+        //     $notification->creator?->makeHidden('profile_picture');
+        // });
+
         return response()->json($notifications, 200);
     }
 
@@ -41,6 +59,7 @@ class NotificationController extends Controller
     {
         $notification = Notification::with('creator')->find($id);
         if ($notification) {
+            $notification->creator?->makeHidden('profile_picture');
             return response()->json($notification, 200);
         }
         return response()->json(['message' => 'Notification not found'], 404);

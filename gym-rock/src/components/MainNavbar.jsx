@@ -40,14 +40,14 @@ const MainNavbar = ({ setTitle }) => {
             as={Link}
             to="/instructors"
             className={activeTab === "/instructors" ? "active-link" : ""}
-            onClick={() => setTitle("Eventy")}
+            onClick={() => setTitle("Wydarzenia")}
           >
             <img
               src={activeTab === "/instructors" ? "./icons/instructors-white.svg" : "./icons/instructors-gray.svg"}
               alt="Instructors"
               className="px-2"
             />
-            Eventy
+            Wydarzenia
           </Nav.Link>
           <Nav.Link
             as={Link}

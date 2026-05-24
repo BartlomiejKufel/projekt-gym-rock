@@ -26,7 +26,7 @@ function App() {
   const [headerVisible, setHeaderVisible] = useState(true);
   return (
     <BrowserRouter>
-      {headerVisible && <Header title={title} />}
+      {headerVisible && <Header title={title} setMainNavbarVisible={setMainNavbarVisible} userId={userId} />}
       <Routes>
         <Route path="/" element={<Login setHeaderVisible={setHeaderVisible} setMainNavbarVisible={setMainNavbarVisible} setUserId={setUserId} />} />
         <Route path="/instructors" element={<ProtectedRoute userId={userId}><Instructors userId={userId} /></ProtectedRoute>} />

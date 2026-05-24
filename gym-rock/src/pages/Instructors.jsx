@@ -20,6 +20,38 @@ const Instructors = ({ userId }) => {
   const [reminders, setReminder] = useState([]);
   const [selectedEvent, setSelectedEvent] = useState(null);
 
+  const fetchRegisteredEvents = () => {
+    if (!userId) return;
+    fetch(`http://localhost:8000/api/users/${userId}/registered-events`)
+      .then((response) => response.json())
+      .then((data) => {
+        if (Array.isArray(data)) {
+          const mapped = data.map((event) => {
+            const startParts = event.start_date.split(' ');
+            const endParts = event.end_date.split(' ');
+            const startHour = startParts[1] ? parseInt(startParts[1].split(':')[0], 10) : 10;
+            const endHour = endParts[1] ? parseInt(endParts[1].split(':')[0], 10) : 11;
+
+            return {
+              event_id: event.event_id,
+              start: startHour,
+              end: endHour,
+              title: event.name,
+              instructor: `${event.instructor.name} ${event.instructor.surname}`
+            };
+          });
+          setReminder(mapped);
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching registered events:", error);
+      });
+  };
+
+  useEffect(() => {
+    fetchRegisteredEvents();
+  }, [userId]);
+
   useEffect(() => {
     fetch(`http://localhost:8000/api/events?date=${selectedDate}`)
       .then((response) => response.json())
@@ -38,25 +70,18 @@ const Instructors = ({ userId }) => {
             instructor: `${event.instructor.name} ${event.instructor.surname}`,
             color: event.event_color || "#4E49DE",
             description: event.description,
-            start_date: event.start_date,
-            end_date: event.end_date,
             instructor_img: event.instructor_id
               ? `http://localhost:8000/api/users/profile_picture/${event.instructor_id}`
               : "/img/default-profile-pic.png"
           };
         });
         setEvents(mapped);
-
-        if (mapped.length > 0) {
-          setReminder([mapped[0]]);
-        } else {
-          setReminder([]);
-        }
       })
       .catch((error) => {
         console.error("Error fetching events:", error);
       });
   }, [selectedDate]);
+
   return (
     <Container className="mb-5 pt-4">
       <div className="mx-2 mb-4">

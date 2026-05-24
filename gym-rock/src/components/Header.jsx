@@ -1,12 +1,85 @@
 import "./Header.css";
 import { useNavigate, useLocation } from "react-router-dom";
-import { useState } from "react";
+import ReminderBlock from "../components/ReminderBlock"
+import { useState, useEffect } from "react";
 
-const Header = ({ title }) => {
+const Header = ({ title, setMainNavbarVisible, userId }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const isSettings = location.pathname === "/settings";
   const [showNotifications, setShowNotifications] = useState(false);
+  const [reminders, setReminder] = useState([]);
+  const [notifications, setNotifications] = useState([]);
+
+  const fetchRegisteredEvents = () => {
+    if (!userId) return;
+    fetch(`http://localhost:8000/api/users/${userId}/registered-events`)
+      .then((response) => response.json())
+      .then((data) => {
+        if (Array.isArray(data)) {
+          const mapped = data.map((event) => {
+            const startParts = event.start_date.split(' ');
+            const endParts = event.end_date.split(' ');
+            const startHour = startParts[1] ? parseInt(startParts[1].split(':')[0], 10) : 10;
+            const endHour = endParts[1] ? parseInt(endParts[1].split(':')[0], 10) : 11;
+
+            return {
+              event_id: event.event_id,
+              start: startHour,
+              end: endHour,
+              title: event.name,
+              instructor: `${event.instructor.name} ${event.instructor.surname}`
+            };
+          });
+          setReminder(mapped);
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching registered events:", error);
+      });
+  };
+
+  const fetchNotifications = () => {
+    if (!userId) return;
+    fetch(`http://localhost:8000/api/notifications/active`)
+      .then((response) => response.json())
+      .then((data) => {
+        if (Array.isArray(data)) {
+          const mapped = data.map((notification) => {
+            return {
+              title: notification.name,
+              description: notification.description,
+            };
+          });
+          setNotifications(mapped);
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching notifications:", error);
+      });
+  };
+
+  useEffect(() => {
+    fetchRegisteredEvents();
+    fetchNotifications();
+
+    const interval = setInterval(() => {
+      fetchRegisteredEvents();
+      fetchNotifications();
+    }, 30000);
+
+    return () => clearInterval(interval);
+  }, [userId]);
+
+  useEffect(() => {
+    if (isSettings) {
+      setMainNavbarVisible(false);
+    }
+    else {
+      setMainNavbarVisible(true);
+    }
+  }, [isSettings]);
+
 
   return (
     <div className="top-banner-container">
@@ -47,7 +120,7 @@ const Header = ({ title }) => {
           <div className="notifications-backdrop" onClick={() => setShowNotifications(false)}></div>
           <div className="notifications-panel pb-4">
             <div className="d-flex justify-content-between align-items-center mb-4 px-4 pt-5">
-              <h3 className="fw-bold mb-0" style={{ color: "#303437" }}>Notifications</h3>
+              <h3 className="fw-bold mb-0" style={{ color: "#303437" }}>Powiadomienia</h3>
               <button className="close-notifications-btn" onClick={() => setShowNotifications(false)}>
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="#303437" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
                   <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -57,36 +130,26 @@ const Header = ({ title }) => {
             </div>
 
             <div className="px-4 d-flex flex-column gap-3">
-              <div className="notification-card bg-purple shadow-sm">
-                <div className="notification-icon-wrapper">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
-                    <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z" />
-                  </svg>
-                </div>
-                <div>
-                  <div className="notification-title">Training Advance</div>
-                  <div className="notification-desc d-flex align-items-center mt-1">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" className="me-1" viewBox="0 0 16 16">
-                      <path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z" />
-                      <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z" />
-                    </svg>
-                    8.00 - 10.00
-                  </div>
-                </div>
-              </div>
+              {reminders.length > 0 && (
+                reminders.map((event, index) => (
+                  <ReminderBlock event={event} />
+                )))}
 
-              <div className="notification-card bg-green shadow-sm">
-                <div className="notification-icon-wrapper">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
-                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
-                    <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
-                  </svg>
-                </div>
-                <div>
-                  <div className="notification-title">Discount</div>
-                  <div className="notification-desc mt-1">Discounts for children -15%</div>
-                </div>
-              </div>
+              {notifications.length > 0 && (
+                notifications.map((notification, index) => (
+                  <div key={index} className="notification-card bg-green shadow-sm">
+                    <div className="notification-icon-wrapper">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
+                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                        <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                      </svg>
+                    </div>
+                    <div>
+                      <div className="notification-title">{notification.title}</div>
+                      <div className="notification-desc mt-1">{notification.description}</div>
+                    </div>
+                  </div>
+                )))}
             </div>
 
             <div className="d-flex justify-content-center mt-5 mb-2">
@@ -94,8 +157,9 @@ const Header = ({ title }) => {
             </div>
           </div>
         </div>
-      )}
-    </div>
+      )
+      }
+    </div >
   );
 };
 
