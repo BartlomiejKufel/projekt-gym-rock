@@ -102,7 +102,7 @@ class DatabaseSeeder extends Seeder
             [
                 'name' => 'Trening personalny',
                 'price' => 120.0,
-                'duration' => 1,
+                'duration' => 0,
             ],
             [
                 'name' => 'Sekcja wspinaczkowa',
@@ -112,7 +112,12 @@ class DatabaseSeeder extends Seeder
             [
                 'name' => 'Kurs asekuracji dołowej',
                 'price' => 300.0,
-                'duration' => 1,
+                'duration' => 0,
+            ],
+            [
+                'name' => 'Wydarzenie',
+                'price' => 0.0,
+                'duration' => 0,
             ],
         ]);
 

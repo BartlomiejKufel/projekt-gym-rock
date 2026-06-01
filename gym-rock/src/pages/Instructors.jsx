@@ -33,7 +33,24 @@ const Instructors = ({ userId }) => {
       })
       .catch((error) => console.error("Error loading event details:", error));
   };
-
+  const handleUnregister = async () => {
+    if (!selectedEvent) return;
+    try {
+      const response = await fetch(`http://localhost:8000/api/events/${selectedEvent.event_id}/unregister`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ participant_id: userId })
+      });
+      if (response.ok) {
+        handleEventClick(selectedEvent);
+        fetchRegisteredEvents();
+      } else {
+        console.error("Błąd podczas wypisywania się z wydarzenia");
+      }
+    } catch (error) {
+      console.error("Błąd połączenia podczas wypisywania się", error);
+    }
+  };
 
   const fetchRegisteredEvents = () => {
     if (!userId) return;
@@ -231,27 +248,34 @@ const Instructors = ({ userId }) => {
               </div>
 
               <div className="d-flex justify-content-center mb-4">
-                <button
-                  className="btn btn-light event-register-btn fw-bold px-5 py-3 shadow-sm border-0"
-                  onClick={() => {
-                    setSelectedEvent(null);
-                    setActiveEventDetails(null);
-                    navigate(`/register-event/${selectedEvent.event_id}`);
-                  }}
-                  disabled={
-                    isPastLimit(selectedEvent.registration_limit) ||
-                    isUserRegistered() ||
-                    (activeEventDetails && activeEventDetails.participants?.length >= activeEventDetails.participants_limit)
-                  }
-                >
-                  {isPastLimit(selectedEvent.registration_limit)
-                    ? "Zapisy zamknięte"
-                    : isUserRegistered()
-                      ? "Jesteś już zapisany"
+                {isUserRegistered() ? (
+                  <button
+                    className="btn btn-danger event-register-btn fw-bold px-5 py-3 shadow-sm border-0"
+                    onClick={handleUnregister}
+                    disabled={isPastLimit(selectedEvent.registration_limit)}
+                  >
+                    Wypisz się
+                  </button>
+                ) : (
+                  <button
+                    className="btn btn-light event-register-btn fw-bold px-5 py-3 shadow-sm border-0"
+                    onClick={() => {
+                      setSelectedEvent(null);
+                      setActiveEventDetails(null);
+                      navigate(`/register-event/${selectedEvent.event_id}`);
+                    }}
+                    disabled={
+                      isPastLimit(selectedEvent.registration_limit) ||
+                      (activeEventDetails && activeEventDetails.participants?.length >= activeEventDetails.participants_limit)
+                    }
+                  >
+                    {isPastLimit(selectedEvent.registration_limit)
+                      ? "Zapisy zamknięte"
                       : activeEventDetails && activeEventDetails.participants?.length >= activeEventDetails.participants_limit
                         ? "Brak miejsc"
                         : "Zapisz mnie"}
-                </button>
+                  </button>
+                )}
               </div>
             </div>
           </div>
