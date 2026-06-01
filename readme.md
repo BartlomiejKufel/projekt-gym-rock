@@ -1,48 +1,79 @@
-# Temat projektu
+# Gym Rock - aplikacja webowa dla klientów ścianki wspinaczkowej
 
-Krótki, zwięzły opis tłumaczący główny cel aplikacji, dla kogo jest przeznaczona i jakie jest jej główne zastosowanie.
+**Gym Rock** to aplikacja webowa przeznaczona dla klientów ścianki wspinaczkowej. Jej głównym zadaniem jest możliwość śledzenia wykupionych usług i produktów, historii zakupów, organizacja wydarzeń grupowych oraz zarządzanie wejściami za pomocą wirtualnych kart QR. Aplikacja jest skierowana zarówno do użytkowników obiektu, jak i instruktorów.
 
-Lista pytań pomocniczych:
-1. Jaki problem rozwiązuje nasza aplikacja?
-2. Jeśli istnieją podobne rozwiązania, to czym nasza aplikacja się wyróżnia?
+### Jaki problem rozwiązuje Gym Rock?
+Gym Rock automatyzuje operacje. Eliminuje konieczność posiadania fizycznych, plastikowych kart poprzez wbudowany system wejść oparty na kodach QR. Dzięki aplikacji, klienci mogą samodzielnie kupować wejścia na wydarzenia online, przeglądać historię swoich wejść(statystyki, kluczowe dla zapalonych wspinaczy) oraz otrzymywać powiadomienia na żywo. Co może znacząco skrócić kolejki i odciążyć pracowników recepcji.
 
-## Uruchomienie projektu (developer)
+### Czym wyróżnia się Gym Rock?
+System stawia na bezpośrednią wygodę użytkownika i minimalizm. Gym Rock oferuje intuicyjny, responsywny interfejs oparty na technologii React. Integruje wszystko w jednym miejscu: powiadomienia na żywo, wirtualne karty, statystyki i proste płatności. Dostarczając szybkie i stabilne rozwiązania dla nowoczesnego klubu.
 
-Podaj użyte technologie w przejrzystej postaci (np. tabelka) wraz z linkami do oficjalnych stron. 
-**Kluczowe:** Zawsze podawaj dokładne wersje technologii (np. `PHP 8.5`, `Laravel 13`, `MySQL 8.0`). Brak konkretnej wersji to częsty powód problemów z uruchomieniem starszych projektów na nowych maszynach.
+## Uruchomienie projektu
 
+### Użyte technologie
+
+| Kategoria | Technologia | Wersja |
+|-----------|-------------|--------|
+| **Frontend** | [React](https://react.dev/) | 19.2.4 |
+| | [Vite](https://vitejs.dev/) | 8.0.0 |
+| | [React Bootstrap](https://react-bootstrap.github.io/) | 2.10.10 |
+| **Backend** | [PHP](https://www.php.net/) | ^8.3 |
+| | [Laravel](https://laravel.com/) | 13.0 |
+| **Baza Danych** | [SQLite](https://www.sqlite.org/index.html) | - |
 
 ### Wymagania programowe
 
-Wypisz narzędzia niezbędne do zbudowania i uruchomienia projektu w trybie deweloperskim na czystym komputerze. Zwróć uwagę na:
+Do uruchomienia projektu wymagane są:
+- **Node.js** (zalecana wersja 20+) oraz menedżer pakietów **npm**.
+- **PHP** (wersja 8.3 lub nowsza).
+- **Composer** (do zarządzania zależnościami PHP).
+- **Git** (do pobrania repozytorium).
 
-- **System operacyjny** (np. Windows 11, macOS, Linux).
-- **Środowisko uruchomieniowe / SDK** (np. PHP 8.5, Node.js v22+, Composer).
-- **Silnik bazy danych** (np. MySQL 8.0, PostgreSQL 16).
-- **Dodatkowe narzędzia** (np. Docker, Docker Compose, konkretny menedżer pakietów jak `npm` czy `composer`).
+### Proces instalacji i konfiguracji
 
-### Proces instalacji
+Projekt składa się z dwóch głównych części: backendu (`gym-rock-api`) i frontendu (`gym-rock`). Należy skonfigurować obie aplikacje.
 
-Instrukcja "krok po kroku", która prowadzi za rękę. Zakładaj, że osoba uruchamiająca projekt nie zna użytego frameworka.
-1. Jak pobrać projekt (np. `git clone <url>`).
-2. Jak zainstalować zależności (np. `composer install`, `npm install`).
+1. **Pobranie projektu:**
+   ```bash
+   git clone https://github.com/BartlomiejKufel/projekt-gym-rock.git
+   cd projekt-gym-rock
+   ```
 
-### Proces konfiguracji
+2. **Konfiguracja backendu (API):**
+   ```bash
+   cd gym-rock-api
+   composer install
+   cp .env.example .env
+   php artisan key:generate
+   ```
+   *Baza danych domyślnie wykorzystuje SQLite. W Laravel 13 plik `database/database.sqlite` tworzy się często automatycznie, ale upewnij się, że istnieje.*
+   
+   Uruchom migracje, aby zbudować strukturę bazy i załadować dane:
+   ```bash
+   php artisan migrate --seed
+   ```
 
-Opisz wszystko to, co programista musi ustawić na swojej maszynie przed pierwszym uruchomieniem:
-1. **Zmienne środowiskowe:** np. utwórz plik `.env` na podstawie `.env.example` i wpisz tam klucze API.
-2. **Baza danych:** jak skonfigurować *connection string* (połączenie z bazą).
-3. **Migracje:** komenda do stworzenia struktury bazy (np. `php artisan migrate`, `php artisan db:seed`).
-4. **Dane początkowe (Seed):** jak wygenerować dane testowe i jakie są domyślne dane logowania dla konta administratora (login/hasło).
+3. **Konfiguracja frontendu (Aplikacja klienta):**
+   ```bash
+   cd ../gym-rock
+   npm install
+   ```
 
-**Uruchomienie projektu w terminalu:** Podaj dokładną komendę, która uruchomi aplikację (np. `php artisan serve`, `npm run dev`) wraz z informacją, pod jakim adresem aplikacja będzie dostępna w przeglądarce (np. `http://localhost:8000`).
+### Uruchomienie projektu
 
-## Uruchomienie projektu (user)
+Aplikacja wymaga równoległego uruchomienia dwóch serwerów (frontend i backend). Najlepiej otworzyć dwa osobne okna terminala.
 
-Ta sekcja jest przeznaczona dla użytkownika końcowego, którego nie interesuje kod.
-- Jeśli to aplikacja webowa: podaj link do opublikowanej aplikacji (zdeployowanej w sieci).
-- Jeśli to aplikacja desktopowa/mobilna: opisz skąd pobrać gotowy instalator (np. plik `.exe`, `.apk` w zakładce Releases na GitHubie) i jak go zainstalować.
-- Jakie są wymagania sprzętowe, aby aplikacja działała płynnie?
+**Uruchomienie serwera backend (z katalogu `gym-rock-api`):**
+```bash
+php artisan serve
+```
+*API będzie dostępne pod adresem: `http://localhost:8000`*
+
+**Uruchomienie serwera frontend (z katalogu `gym-rock`):**
+```bash
+npm run dev
+```
+*Aplikacja frontendowa będzie dostępna w przeglądarce pod adresem wyświetlonym w terminalu (np. `http://localhost:5173`).*
 
 ## Podręcznik użytkownika
 
