@@ -11,6 +11,9 @@ class EventController extends Controller
     /**
      * Display a listing of the resource.
      */
+
+
+    
     public function index(Request $request)
     {
         $query = Event::with(['instructor:user_id,name,surname']);
@@ -51,6 +54,8 @@ class EventController extends Controller
     {
         $event = Event::with(['instructor', 'offer', 'participants'])->find($id);
         if ($event) {
+            $event->instructor?->makeHidden('profile_picture');
+            $event->participants?->makeHidden('profile_picture');
             return response()->json($event, 200);
         }
         return response()->json(['message' => 'Event not found'], 404);

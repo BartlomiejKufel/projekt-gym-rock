@@ -41,6 +41,16 @@ class EventParticipantController extends Controller
             'date_of_registration' => now()
         ]);
 
+        // Zapisz historię zakupu
+        if ($event->offer) {
+            \App\Models\PurchaseHistory::create([
+                'customer_id' => $userId,
+                'price' => $event->offer->price,
+                'purchase_date' => now(),
+                'offer_id' => $event->offer_id,
+            ]);
+        }
+
         return response()->json(['message' => 'Zostałeś pomyślnie zapisany na wydarzenie.'], 200);
     }
 

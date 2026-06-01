@@ -12,6 +12,10 @@ import Settings from './pages/Settings';
 import PurchaseHistory from './pages/PurchaseHistory';
 import ProfileEdit from './pages/ProfileEdit';
 import Contact from './pages/Contact';
+import AddEvent from './pages/AddEvent';
+import RegisterSuccess from './pages/RegisterSuccess';
+import RegisterEvent from './pages/RegisterEvent';
+
 
 const ProtectedRoute = ({ userId, children }) => {
   if (!userId) {
@@ -38,6 +42,9 @@ const TitleUpdater = ({ setTitle }) => {
       case "/instructors":
         currentTitle = "Wydarzenia";
         break;
+      case "/instructors/add":
+        currentTitle = "Nowe Wydarzenie";
+        break;
       case "/card":
         currentTitle = "Karta";
         break;
@@ -54,6 +61,11 @@ const TitleUpdater = ({ setTitle }) => {
         currentTitle = "Kontakt";
         break;
       default:
+        if (location.pathname.startsWith("/register-success/")) {
+          currentTitle = "Potwierdzenie";
+        } else if (location.pathname.startsWith("/register-event/")) {
+          currentTitle = "Zapis na zajęcia";
+        }
         break;
     }
 
@@ -78,6 +90,9 @@ function App() {
       <Routes>
         <Route path="/" element={<Login setHeaderVisible={setHeaderVisible} setMainNavbarVisible={setMainNavbarVisible} setUserId={setUserId} />} />
         <Route path="/instructors" element={<ProtectedRoute userId={userId}><Instructors userId={userId} /></ProtectedRoute>} />
+        <Route path="/instructors/add" element={<ProtectedRoute userId={userId}><AddEvent userId={userId} /></ProtectedRoute>} />
+        <Route path="/register-event/:eventId" element={<ProtectedRoute userId={userId}><RegisterEvent userId={userId} /></ProtectedRoute>} />
+        <Route path="/register-success/:eventId" element={<ProtectedRoute userId={userId}><RegisterSuccess setMainNavbarVisible={setMainNavbarVisible} /></ProtectedRoute>} />
         <Route path="/home" element={<ProtectedRoute userId={userId}><Home userId={userId} /></ProtectedRoute>} />
         <Route path="/statistics" element={<ProtectedRoute userId={userId}><Statistics userId={userId} /></ProtectedRoute>} />
         <Route path="/card" element={<ProtectedRoute userId={userId}><Card userId={userId} /></ProtectedRoute>} />

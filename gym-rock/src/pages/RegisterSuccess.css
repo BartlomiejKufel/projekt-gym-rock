@@ -1,0 +1,36 @@
+/* RegisterSuccess.css */
+.register-success-container {
+    min-height: 80vh;
+}
+
+.success-icon-wrapper {
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    background-color: rgba(16, 185, 129, 0.1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 3px solid rgba(16, 185, 129, 0.2);
+}
+
+.event-details-card {
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
+}
+
+.back-to-schedule-btn {
+    background-color: #4E49DE !important;
+    border-color: #4E49DE !important;
+    transition: transform 0.2s ease, background-color 0.2s ease !important;
+}
+
+.back-to-schedule-btn:hover {
+    background-color: #3b36c7 !important;
+    border-color: #3b36c7 !important;
+    transform: scale(1.02);
+}
+
+.back-to-schedule-btn:active {
+    transform: scale(0.98);
+}

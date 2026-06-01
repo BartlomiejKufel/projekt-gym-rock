@@ -4,8 +4,10 @@ import EventBlock from "../components/EventBlock";
 import ReminderBlock from "../components/ReminderBlock"
 import { Container, Row, Col } from "react-bootstrap";
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Instructors = ({ userId }) => {
+  const navigate = useNavigate();
   const getLocalDateString = (date) => {
     const yyyy = date.getFullYear();
     const mm = String(date.getMonth() + 1).padStart(2, '0');
@@ -19,6 +21,19 @@ const Instructors = ({ userId }) => {
   const [events, setEvents] = useState([]);
   const [reminders, setReminder] = useState([]);
   const [selectedEvent, setSelectedEvent] = useState(null);
+  const [activeEventDetails, setActiveEventDetails] = useState(null);
+
+  const handleEventClick = (event) => {
+    setSelectedEvent(event);
+    setActiveEventDetails(null);
+    fetch(`http://localhost:8000/api/events/${event.event_id}`)
+      .then((response) => response.json())
+      .then((data) => {
+        setActiveEventDetails(data);
+      })
+      .catch((error) => console.error("Error loading event details:", error));
+  };
+
 
   const fetchRegisteredEvents = () => {
     if (!userId) return;
@@ -32,8 +47,16 @@ const Instructors = ({ userId }) => {
             const startHour = startParts[1] ? parseInt(startParts[1].split(':')[0], 10) : 10;
             const endHour = endParts[1] ? parseInt(endParts[1].split(':')[0], 10) : 11;
 
+            const dateObj = new Date(event.start_date.replace(' ', 'T'));
+            const formattedDate = dateObj.toLocaleDateString("pl-PL", {
+              weekday: "short",
+              day: "numeric",
+              month: "long"
+            });
+
             return {
               event_id: event.event_id,
+              date: formattedDate,
               start: startHour,
               end: endHour,
               title: event.name,
@@ -88,6 +111,13 @@ const Instructors = ({ userId }) => {
     return new Date() > new Date(limitDate);
   }
 
+  const isUserRegistered = () => {
+    if (!activeEventDetails || !activeEventDetails.participants || !userId) return false;
+    return activeEventDetails.participants.some(
+      (participant) => Number(participant.user_id) === Number(userId)
+    );
+  };
+
   return (
     <Container className="mb-5 pt-4">
       <div className="mx-2 mb-4">
@@ -116,7 +146,7 @@ const Instructors = ({ userId }) => {
                   <Col xs={2} sm={1} className="my-1 text-end fw-medium text-muted pe-2">{hour}:00</Col>
                   <Col xs={10} sm={11} className="ps-2 pe-1">
                     {event ? (
-                      <div onClick={() => setSelectedEvent(event)} style={{ cursor: "pointer" }}>
+                      <div onClick={() => handleEventClick(event)} style={{ cursor: "pointer" }}>
                         <EventBlock event={event} />
                       </div>
                     ) : (
@@ -157,12 +187,12 @@ const Instructors = ({ userId }) => {
 
       {selectedEvent && (
         <div className="event-modal-overlay">
-          <div className="event-modal-backdrop" onClick={() => setSelectedEvent(null)}></div>
+          <div className="event-modal-backdrop" onClick={() => { setSelectedEvent(null); setActiveEventDetails(null); }}></div>
           <div
             className="event-modal-panel"
             style={{ backgroundColor: selectedEvent.color }}
           >
-            <div className="d-flex justify-content-center pt-3 pb-2" onClick={() => setSelectedEvent(null)} style={{ cursor: "pointer" }}>
+            <div className="d-flex justify-content-center pt-3 pb-2" onClick={() => { setSelectedEvent(null); setActiveEventDetails(null); }} style={{ cursor: "pointer" }}>
               <div className="event-modal-handle"></div>
             </div>
             <div className="px-4 pt-3 pb-5 text-white">
@@ -179,17 +209,48 @@ const Instructors = ({ userId }) => {
                 </Col>
               </Row>
 
-              <p className="event-desc mb-4">
+              <p className="event-desc mb-2">
                 {selectedEvent.description || "Brak opisu dla tego wydarzenia."}
               </p>
+
+              <div className="mb-4 d-flex justify-content-start align-items-center">
+                <div style={{
+                  fontSize: "0.9rem",
+                  fontWeight: "500",
+                  backgroundColor: "rgba(255, 255, 255, 0.15)",
+                  padding: "6px 14px",
+                  borderRadius: "20px",
+                  display: "inline-block"
+                }}>
+                  {activeEventDetails ? (
+                    `Zapisanych: ${activeEventDetails.participants?.length || 0} / ${activeEventDetails.participants_limit}`
+                  ) : (
+                    "Zapisanych: Ładowanie..."
+                  )}
+                </div>
+              </div>
 
               <div className="d-flex justify-content-center mb-4">
                 <button
                   className="btn btn-light event-register-btn fw-bold px-5 py-3 shadow-sm border-0"
-                  onClick={() => alert(`Registered for ${selectedEvent.title}`)}
-                  disabled={isPastLimit(selectedEvent.registration_limit)}
+                  onClick={() => {
+                    setSelectedEvent(null);
+                    setActiveEventDetails(null);
+                    navigate(`/register-event/${selectedEvent.event_id}`);
+                  }}
+                  disabled={
+                    isPastLimit(selectedEvent.registration_limit) ||
+                    isUserRegistered() ||
+                    (activeEventDetails && activeEventDetails.participants?.length >= activeEventDetails.participants_limit)
+                  }
                 >
-                  {isPastLimit(selectedEvent.registration_limit) ? "Zapisy zamknięte" : "Zapisz mnie"}
+                  {isPastLimit(selectedEvent.registration_limit)
+                    ? "Zapisy zamknięte"
+                    : isUserRegistered()
+                      ? "Jesteś już zapisany"
+                      : activeEventDetails && activeEventDetails.participants?.length >= activeEventDetails.participants_limit
+                        ? "Brak miejsc"
+                        : "Zapisz mnie"}
                 </button>
               </div>
             </div>

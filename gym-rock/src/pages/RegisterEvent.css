@@ -1,0 +1,131 @@
+/* RegisterEvent.css */
+.register-event-container {
+    min-height: 80vh;
+}
+
+.text-dark-gray {
+    color: #4a4d52;
+}
+
+.text-purple {
+    color: #4E49DE;
+}
+
+.back-btn {
+    border: none;
+    background: none;
+    color: #4a4d52;
+    padding: 0;
+    cursor: pointer;
+    transition: transform 0.2s ease, color 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.back-btn:hover {
+    color: #1a1c1e;
+    transform: translateX(-3px);
+}
+
+.add-input {
+    border: 1px solid #edf2f7;
+    background-color: #f7fafc;
+    padding: 0.75rem 1rem;
+    font-size: 0.95rem;
+    color: #2d3748;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.add-input:focus {
+    border-color: #4E49DE;
+    background-color: #fff;
+    box-shadow: 0 0 0 3px rgba(78, 73, 222, 0.15) !important;
+}
+
+.add-input:disabled, .add-input[readonly] {
+    background-color: #edf2f7;
+    border-color: #e2e8f0;
+    color: #718096;
+    cursor: not-allowed;
+    opacity: 0.85;
+}
+
+.event-summary-box {
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.02);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.event-summary-box:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.save-event-btn {
+    background-color: #4E49DE !important;
+    border-color: #4E49DE !important;
+    font-size: 1.1rem;
+    transition: transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+.save-event-btn:hover:not(:disabled) {
+    background-color: #3b36c7 !important;
+    border-color: #3b36c7 !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(78, 73, 222, 0.3) !important;
+}
+
+.save-event-btn:active:not(:disabled) {
+    transform: translateY(1px);
+}
+
+.stripe-card-wrapper {
+    border: 1px solid #edf2f7;
+    background-color: #f7fafc;
+    padding: 0.75rem 1rem;
+    font-size: 0.95rem;
+    color: #2d3748;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.stripe-card-wrapper.focused {
+    border-color: #4E49DE;
+    background-color: #fff;
+    box-shadow: 0 0 0 3px rgba(78, 73, 222, 0.15) !important;
+}
+
+.form-check-input:checked {
+    background-color: #4E49DE !important;
+    border-color: #4E49DE !important;
+}
+
+.form-check-input:focus {
+    box-shadow: 0 0 0 3px rgba(78, 73, 222, 0.25) !important;
+    border-color: #4E49DE !important;
+}
+
+.form-check-label {
+    cursor: pointer;
+    user-select: none;
+    transition: color 0.2s ease;
+}
+
+.form-check-label:hover {
+    color: #2d3748 !important;
+}
+
+/* Slide in animation for the card content */
+.register-event-container .card {
+    animation: fadeInUp 0.4s ease-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

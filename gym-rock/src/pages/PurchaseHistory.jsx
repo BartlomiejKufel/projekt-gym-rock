@@ -64,7 +64,7 @@ const PurchaseHistory = ({ userId }) => {
                                                             </div>
                                                             <div>
                                                                 <span className="fw-semibold text-dark-gray">{purchase.offer?.name || "Karnet / Usługa"}</span>
-                                                                {purchase.offer?.duration && (
+                                                                {Number(purchase.offer.duration) !== 0 && (
                                                                     <div className="text-muted mini-text">{purchase.offer.duration} dni</div>
                                                                 )}
                                                             </div>

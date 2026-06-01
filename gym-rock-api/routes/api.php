@@ -11,6 +11,7 @@ use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\QrCardController;
 use App\Http\Controllers\EventParticipantController;
 
+
 Route::apiResource('offers', OfferController::class);
 
 Route::apiResource('roles', RoleController::class);

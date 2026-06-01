@@ -10,6 +10,18 @@ const Header = ({ title, setMainNavbarVisible, userId }) => {
   const [showNotifications, setShowNotifications] = useState(false);
   const [reminders, setReminder] = useState([]);
   const [notifications, setNotifications] = useState([]);
+  const [currentUser, setCurrentUser] = useState(null);
+
+  useEffect(() => {
+    if (userId) {
+      fetch(`http://localhost:8000/api/users/${userId}`)
+        .then((response) => response.json())
+        .then((data) => {
+          setCurrentUser(data);
+        })
+        .catch((error) => console.error("Error fetching user data:", error));
+    }
+  }, [userId]);
 
   const fetchRegisteredEvents = () => {
     if (!userId) return;
@@ -23,8 +35,16 @@ const Header = ({ title, setMainNavbarVisible, userId }) => {
             const startHour = startParts[1] ? parseInt(startParts[1].split(':')[0], 10) : 10;
             const endHour = endParts[1] ? parseInt(endParts[1].split(':')[0], 10) : 11;
 
+            const dateObj = new Date(event.start_date.replace(' ', 'T'));
+            const formattedDate = dateObj.toLocaleDateString("pl-PL", {
+              weekday: "short",
+              day: "numeric",
+              month: "long"
+            });
+
             return {
               event_id: event.event_id,
+              date: formattedDate,
               start: startHour,
               end: endHour,
               title: event.name,
@@ -113,8 +133,13 @@ const Header = ({ title, setMainNavbarVisible, userId }) => {
       </div>
 
 
-      <div className="top-banner-title">
-        {!isSettings && title}
+      <div className="top-banner-title d-flex justify-content-between align-items-center">
+        <span>{!isSettings && title}</span>
+        {location.pathname === "/instructors" && currentUser?.role_id === 3 && (
+          <button className="add-event-btn" onClick={() => navigate("/instructors/add")}>
+            Dodaj wydarzenie
+          </button>
+        )}
       </div>
 
       {showNotifications && (
@@ -134,7 +159,7 @@ const Header = ({ title, setMainNavbarVisible, userId }) => {
             <div className="px-4 d-flex flex-column gap-3">
               {reminders.length > 0 && (
                 reminders.map((event, index) => (
-                  <ReminderBlock event={event} />
+                  <ReminderBlock key={event.event_id || index} event={event} />
                 )))}
 
               {notifications.length > 0 && (

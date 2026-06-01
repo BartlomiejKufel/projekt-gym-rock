@@ -16,7 +16,7 @@ const MainNavbar = () => {
             className={activeTab === "/home" ? "active-link" : ""}
           >
             <img
-              src={activeTab === "/home" ? "./icons/home-white.svg" : "./icons/home-gray.svg"}
+              src={activeTab === "/home" ? "/icons/home-white.svg" : "/icons/home-gray.svg"}
               alt="Home"
               className="px-2"
             />
@@ -28,7 +28,7 @@ const MainNavbar = () => {
             className={activeTab === "/statistics" ? "active-link" : ""}
           >
             <img
-              src={activeTab === "/statistics" ? "./icons/statistics-white.svg" : "./icons/statistics-gray.svg"}
+              src={activeTab === "/statistics" ? "/icons/statistics-white.svg" : "/icons/statistics-gray.svg"}
               alt="Statistics"
               className="px-2"
             />
@@ -40,7 +40,7 @@ const MainNavbar = () => {
             className={activeTab === "/instructors" ? "active-link" : ""}
           >
             <img
-              src={activeTab === "/instructors" ? "./icons/instructors-white.svg" : "./icons/instructors-gray.svg"}
+              src={activeTab === "/instructors" ? "/icons/instructors-white.svg" : "/icons/instructors-gray.svg"}
               alt="Instructors"
               className="px-2"
             />
@@ -52,7 +52,7 @@ const MainNavbar = () => {
             className={activeTab === "/card" ? "active-link" : ""}
           >
             <img
-              src={activeTab === "/card" ? "./icons/card-white.svg" : "./icons/card-gray.svg"}
+              src={activeTab === "/card" ? "/icons/card-white.svg" : "/icons/card-gray.svg"}
               alt="Card"
               className="px-2"
             />

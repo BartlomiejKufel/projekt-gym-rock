@@ -1,0 +1,84 @@
+/* AddEvent.css */
+.add-event-container {
+    min-height: 80vh;
+}
+
+.text-dark-gray {
+    color: #4a4d52;
+}
+
+.back-btn {
+    border: none;
+    background: none;
+    color: #4a4d52;
+    padding: 0;
+    cursor: pointer;
+    transition: transform 0.2s ease, color 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.back-btn:hover {
+    color: #1a1c1e;
+    transform: translateX(-3px);
+}
+
+.add-input {
+    border: 1px solid #edf2f7;
+    background-color: #f7fafc;
+    padding: 0.75rem 1rem;
+    font-size: 0.95rem;
+    color: #2d3748;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.add-input:focus {
+    border-color: #4E49DE;
+    background-color: #fff;
+    box-shadow: 0 0 0 3px rgba(78, 73, 222, 0.15) !important;
+}
+
+.color-presets-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding-top: 4px;
+}
+
+.color-preset-circle {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: transform 0.2s ease, border-color 0.2s ease;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.color-preset-circle:hover {
+    transform: scale(1.15);
+}
+
+.color-preset-circle.selected {
+    border-color: #1a1c1e;
+    transform: scale(1.1);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+}
+
+.save-event-btn {
+    background-color: #4E49DE !important;
+    border-color: #4E49DE !important;
+    font-size: 1rem;
+    transition: transform 0.2s ease, background-color 0.2s ease !important;
+}
+
+.save-event-btn:hover:not(:disabled) {
+    background-color: #3b36c7 !important;
+    border-color: #3b36c7 !important;
+    transform: scale(1.02);
+}
+
+.save-event-btn:active:not(:disabled) {
+    transform: scale(0.98);
+}
