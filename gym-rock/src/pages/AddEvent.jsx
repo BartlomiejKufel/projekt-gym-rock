@@ -46,8 +46,7 @@ const AddEvent = ({ userId }) => {
         .then((response) => response.json())
         .then((data) => {
           setCurrentUser(data);
-        })
-        .catch((error) => console.error("Error fetching instructor details:", error));
+        });
     }
 
     fetch("http://localhost:8000/api/offers")
@@ -62,8 +61,7 @@ const AddEvent = ({ userId }) => {
             setOfferId(filtered[0].offer_id);
           }
         }
-      })
-      .catch((error) => console.error("Error fetching offers:", error));
+      });
   }, [userId]);
 
   const handleSubmit = (e) => {
@@ -75,7 +73,7 @@ const AddEvent = ({ userId }) => {
       return;
     }
 
-    // Fetch existing events on the same date to check for overlaps
+    // Pobranie istniejących wydarzeń z tego dnia w celu sprawdzenia nakładania się terminów
     fetch(`http://localhost:8000/api/events?date=${date}`)
       .then((response) => response.json())
       .then((existingEvents) => {
@@ -294,7 +292,7 @@ const AddEvent = ({ userId }) => {
         </Col>
       </Row>
 
-      {/* Spacing for MainNavbar */}
+      {/* Odstęp dla paska nawigacji MainNavbar */}
       <Row style={{ height: "15vh" }}></Row>
     </Container>
   );

@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\PurchaseHistory;
 use Illuminate\Http\Request;
+use App\Http\Requests\StorePurchaseHistoryRequest;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class PurchaseHistoryController extends Controller
 {
@@ -25,15 +27,9 @@ class PurchaseHistoryController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StorePurchaseHistoryRequest $request)
     {
-        $validated = $request->validate([
-            'customer_id' => 'required|exists:users,user_id',
-            'employee_id' => 'required|exists:users,user_id',
-            'price' => 'required|numeric',
-            'purchase_date' => 'required|date',
-            'offer_id' => 'required|exists:offers,offer_id',
-        ]);
+        $validated = $request->validated();
         
         $purchase = PurchaseHistory::create($validated);
         return response()->json($purchase, 201);
@@ -50,29 +46,33 @@ class PurchaseHistoryController extends Controller
              $purchase->employee?->makeHidden('profile_picture');
              return response()->json($purchase, 200);
         }
-        return response()->json(['message' => 'Purchase not found'], 404);
+        return response()->json(['message' => 'Nie znaleziono zakupu'], 404);
     }
 
     public function showActiveOffers(string $customerId)
     {
-        $activePurchases = PurchaseHistory::query()
-            ->select(
-                'purchase_history.purchase_id as purchase_id',
-                'purchase_history.purchase_date',
-                'offers.name as offer_name',
-                DB::raw('DATE_ADD(purchase_history.purchase_date, INTERVAL offers.duration DAY) as valid_until'),
-                DB::raw('DATEDIFF(DATE_ADD(purchase_history.purchase_date, INTERVAL offers.duration DAY), NOW()) as days_left')
-            )
-            ->join('offers', 'purchase_history.offer_id', '=', 'offers.offer_id')
-            ->where('purchase_history.customer_id', $customerId)
-            ->whereRaw('DATE_ADD(purchase_history.purchase_date, INTERVAL offers.duration DAY) >= NOW()')
+        $purchases = PurchaseHistory::with('offer')
+            ->where('customer_id', $customerId)
             ->get();
 
-        if ($activePurchases->isNotEmpty()) {
-            return response()->json($activePurchases, 200);
-        }
+        $activePurchases = $purchases->filter(function ($purchase) {
+            if (!$purchase->offer) return false;
+            $validUntil = Carbon::parse($purchase->purchase_date)->addDays($purchase->offer->duration);
+            return $validUntil->isFuture() || $validUntil->isToday();
+        })->map(function ($purchase) {
+            $validUntil = Carbon::parse($purchase->purchase_date)->addDays($purchase->offer->duration);
+            $daysLeft = Carbon::now()->startOfDay()->diffInDays($validUntil->copy()->startOfDay(), false);
+            
+            return [
+                'purchase_id' => $purchase->purchase_id,
+                'purchase_date' => $purchase->purchase_date,
+                'offer_name' => $purchase->offer->name,
+                'valid_until' => $validUntil->toDateTimeString(),
+                'days_left' => (int) $daysLeft
+            ];
+        })->values();
 
-        return response()->json(['message' => 'No active offers found'], 404);
+        return response()->json($activePurchases, 200);
     }
 
     public function getUserPurchases(string $userId)
@@ -95,7 +95,7 @@ class PurchaseHistoryController extends Controller
             $purchase->update($request->all());
             return response()->json($purchase, 200);
         }
-        return response()->json(['message' => 'Purchase not found'], 404);
+        return response()->json(['message' => 'Nie znaleziono zakupu'], 404);
     }
 
     /**
@@ -106,8 +106,8 @@ class PurchaseHistoryController extends Controller
         $purchase = PurchaseHistory::find($id);
         if ($purchase) {
             $purchase->delete();
-            return response()->json(['message' => 'Purchase deleted'], 200);
+            return response()->json(['message' => 'Zakup został usunięty'], 200);
         }
-        return response()->json(['message' => 'Purchase not found'], 404);
+        return response()->json(['message' => 'Nie znaleziono zakupu'], 404);
     }
 }

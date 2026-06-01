@@ -14,32 +14,31 @@ const RegisterEventContent = ({ userId }) => {
   const stripe = useStripe();
   const elements = useElements();
 
-  // Loaded details
+  // Załadowane szczegóły
   const [event, setEvent] = useState(null);
   const [user, setUser] = useState(null);
 
-  // Form states
+  // Stany formularza
   const [acceptTerms, setAcceptTerms] = useState(false);
   const [confirmPayment, setConfirmPayment] = useState(false);
   const [cardFocused, setCardFocused] = useState(false);
 
-  // Stripe validation states
+  // Stany walidacji Stripe
   const [isCardComplete, setIsCardComplete] = useState(false);
   const [cardError, setCardError] = useState(null);
 
-  // UI state
+  // Stan interfejsu (UI)
   const [errorMsg, setErrorMsg] = useState(null);
   const [processing, setProcessing] = useState(false);
 
-  // Fetch event and user details
+  // Pobranie szczegółów wydarzenia i użytkownika
   useEffect(() => {
     if (eventId) {
       fetch(`http://localhost:8000/api/events/${eventId}`)
         .then((response) => response.json())
         .then((data) => {
           setEvent(data);
-        })
-        .catch((error) => console.error("Error fetching event details:", error));
+        });
     }
 
     if (userId) {
@@ -47,8 +46,7 @@ const RegisterEventContent = ({ userId }) => {
         .then((response) => response.json())
         .then((data) => {
           setUser(data);
-        })
-        .catch((error) => console.error("Error fetching user data:", error));
+        });
     }
   }, [eventId, userId]);
 
@@ -154,8 +152,6 @@ const RegisterEventContent = ({ userId }) => {
           <Card className="border-0 shadow-sm rounded-4 mx-2 overflow-hidden">
             <Card.Body className="p-2 p-md-5">
               <Form onSubmit={handleSubmit}>
-
-                {/* Event details summary */}
                 <h4 className="fw-bold text-dark-gray mb-3 border-bottom pb-2">Szczegóły zajęć</h4>
                 {event ? (
                   <div className="event-summary-box p-3 rounded-3 mb-4" style={{ backgroundColor: "#f8fafc", borderLeft: `5px solid ${event.event_color || '#4E49DE'}` }}>
@@ -180,7 +176,7 @@ const RegisterEventContent = ({ userId }) => {
                   <div className="py-3 text-muted text-center small">Ładowanie szczegółów zajęć...</div>
                 )}
 
-                {/* User details (readonly) */}
+
                 <h5 className="fw-bold text-dark-gray mb-3 border-bottom pb-2">Dane uczestnika</h5>
                 {user ? (
                   <div className="mb-4">
@@ -203,7 +199,7 @@ const RegisterEventContent = ({ userId }) => {
                   <div className="py-3 text-muted text-center small">Ładowanie danych uczestnika...</div>
                 )}
 
-                {/* Stripe Card details */}
+                {/* Dane karty Stripe */}
                 <h5 className="fw-bold text-dark-gray mb-3 border-bottom pb-2">Dane karty płatniczej</h5>
                 <Form.Group className="mb-4">
                   <div className={`stripe-card-wrapper p-3 rounded-3 mb-2 ${cardFocused ? 'focused' : ''}`}>
@@ -219,7 +215,7 @@ const RegisterEventContent = ({ userId }) => {
                   </Form.Text>
                 </Form.Group>
 
-                {/* Consent checkboxes */}
+
                 <h5 className="fw-bold text-dark-gray mb-3 border-bottom pb-2">Zgody i płatność</h5>
                 <Form.Group className="mb-3" controlId="termsCheckbox">
                   <Form.Check
@@ -260,7 +256,7 @@ const RegisterEventContent = ({ userId }) => {
         </Col>
       </Row>
 
-      {/* Spacing for MainNavbar */}
+      {/* Odstęp dla paska nawigacji MainNavbar */}
       <Row style={{ height: "15vh" }}></Row>
     </Container>
   );

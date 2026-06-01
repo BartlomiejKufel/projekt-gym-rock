@@ -44,36 +44,28 @@ const Statistics = ({ userId }) => {
     }
 
     async function getWeeklyData() {
-        try {
-            const response = await fetch(`http://localhost:8000/api/entrances/user/${userId}/weekly`);
-            const data = await response.json();
-            if (Array.isArray(data)) {
-                const formatted = data.map(item => ({
-                    ...item,
-                    formattedTime: formatTime(item.time_spent)
-                }));
-                setWeeklyData(formatted);
-                setWeeklyTotalTime(calculateTotalTime(data));
-            }
-        } catch (error) {
-            console.error("Error fetching weekly data:", error);
+        const response = await fetch(`http://localhost:8000/api/entrances/user/${userId}/weekly`);
+        const data = await response.json();
+        if (Array.isArray(data)) {
+            const formatted = data.map(item => ({
+                ...item,
+                formattedTime: formatTime(item.time_spent)
+            }));
+            setWeeklyData(formatted);
+            setWeeklyTotalTime(calculateTotalTime(data));
         }
     }
 
     async function getMonthlyData() {
-        try {
-            const response = await fetch(`http://localhost:8000/api/entrances/user/${userId}/monthly`);
-            const data = await response.json();
-            if (Array.isArray(data)) {
-                const formatted = data.map(item => ({
-                    ...item,
-                    formattedTime: formatTime(item.time_spent)
-                }));
-                setMonthlyData(formatted);
-                setMonthlyTotalTime(calculateTotalTime(data));
-            }
-        } catch (error) {
-            console.error("Error fetching monthly data:", error);
+        const response = await fetch(`http://localhost:8000/api/entrances/user/${userId}/monthly`);
+        const data = await response.json();
+        if (Array.isArray(data)) {
+            const formatted = data.map(item => ({
+                ...item,
+                formattedTime: formatTime(item.time_spent)
+            }));
+            setMonthlyData(formatted);
+            setMonthlyTotalTime(calculateTotalTime(data));
         }
     }
 

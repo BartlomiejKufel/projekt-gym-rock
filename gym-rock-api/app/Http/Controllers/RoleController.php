@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\Role;
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreRoleRequest;
 
 class RoleController extends Controller
 {
@@ -19,11 +20,9 @@ class RoleController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreRoleRequest $request)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-        ]);
+        $validated = $request->validated();
         $role = Role::create($validated);
         return response()->json($role, 201);
     }
@@ -37,7 +36,7 @@ class RoleController extends Controller
         if ($role) {
             return response()->json($role, 200);
         }
-        return response()->json(['message' => 'Role not found'], 404);
+        return response()->json(['message' => 'Nie znaleziono roli'], 404);
     }
 
     /**
@@ -50,7 +49,7 @@ class RoleController extends Controller
             $role->update($request->all());
             return response()->json($role, 200);
         }
-        return response()->json(['message' => 'Role not found'], 404);
+        return response()->json(['message' => 'Nie znaleziono roli'], 404);
     }
 
     /**
@@ -61,8 +60,8 @@ class RoleController extends Controller
         $role = Role::find($id);
         if ($role) {
             $role->delete();
-            return response()->json(['message' => 'Role deleted'], 200);
+            return response()->json(['message' => 'Rola została usunięta'], 200);
         }
-        return response()->json(['message' => 'Role not found'], 404);
+        return response()->json(['message' => 'Nie znaleziono roli'], 404);
     }
 }

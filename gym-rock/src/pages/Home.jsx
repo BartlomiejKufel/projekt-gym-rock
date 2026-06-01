@@ -10,9 +10,6 @@ const Home = ({ userId }) => {
             .then((response) => response.json())
             .then((data) => {
                 setActivePasses(data);
-            })
-            .catch((error) => {
-                console.error('Error:', error);
             });
     };
 

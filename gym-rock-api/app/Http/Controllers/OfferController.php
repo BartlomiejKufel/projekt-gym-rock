@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreOfferRequest;
 use App\Models\Offer;
 
 class OfferController extends Controller
@@ -21,13 +22,9 @@ class OfferController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreOfferRequest $request)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'price' => 'required|numeric',
-            'duration' => 'required|integer',
-        ]);
+        $validated = $request->validated();
         
         $offer = Offer::create($validated);
         return response()->json($offer, 201);
@@ -42,7 +39,7 @@ class OfferController extends Controller
         if ($offer) {
             return response()->json($offer, 200);
         }
-        return response()->json(['message' => 'Offer not found'], 404);
+        return response()->json(['message' => 'Nie znaleziono oferty'], 404);
     }
 
     /**
@@ -55,7 +52,7 @@ class OfferController extends Controller
             $offer->update($request->all());
             return response()->json($offer, 200);
         }
-        return response()->json(['message' => 'Offer not found'], 404);
+        return response()->json(['message' => 'Nie znaleziono oferty'], 404);
     }
 
     /**
@@ -66,8 +63,8 @@ class OfferController extends Controller
         $offer = Offer::find($id);
         if ($offer) {
             $offer->delete();
-            return response()->json(['message' => 'Offer deleted'], 200);
+            return response()->json(['message' => 'Oferta została usunięta'], 200);
         }
-        return response()->json(['message' => 'Offer not found'], 404);
+        return response()->json(['message' => 'Nie znaleziono oferty'], 404);
     }
 }

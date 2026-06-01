@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\Entrance;
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreEntranceRequest;
 use Carbon\Carbon;
 
 class EntranceController extends Controller
@@ -21,15 +22,9 @@ class EntranceController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreEntranceRequest $request)
     {
-        $validated = $request->validate([
-            'user_id' => 'required|exists:users,user_id',
-            'date_of_entry' => 'required|date',
-            'start_time' => 'required',
-            'end_time' => 'nullable',
-            'time_spent' => 'nullable|integer',
-        ]);
+        $validated = $request->validated();
         
         $entrance = Entrance::create($validated);
         return response()->json($entrance, 201);
@@ -44,7 +39,7 @@ class EntranceController extends Controller
         if ($entrance) {
             return response()->json($entrance, 200);
         }
-        return response()->json(['message' => 'Entrance not found'], 404);
+        return response()->json(['message' => 'Nie znaleziono wejścia'], 404);
     }
 
     /**
@@ -57,7 +52,7 @@ class EntranceController extends Controller
             $entrance->update($request->all());
             return response()->json($entrance, 200);
         }
-        return response()->json(['message' => 'Entrance not found'], 404);
+        return response()->json(['message' => 'Nie znaleziono wejścia'], 404);
     }
 
     /**
@@ -68,9 +63,9 @@ class EntranceController extends Controller
         $entrance = Entrance::find($id);
         if ($entrance) {
             $entrance->delete();
-            return response()->json(['message' => 'Entrance deleted'], 200);
+            return response()->json(['message' => 'Wejście zostało usunięte'], 200);
         }
-        return response()->json(['message' => 'Entrance not found'], 404);
+        return response()->json(['message' => 'Nie znaleziono wejścia'], 404);
     }
 
     /**

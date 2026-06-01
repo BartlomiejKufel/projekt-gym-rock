@@ -6,6 +6,7 @@ use Illuminate\Database\Seeder;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\Offer;
+use App\Models\PurchaseHistory;
 use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
@@ -121,5 +122,14 @@ class DatabaseSeeder extends Seeder
             ],
         ]);
 
+        PurchaseHistory::insert([
+            [
+                'customer_id' => 4,
+                'employee_id' => 2,
+                'price' => 160.0,
+                'purchase_date' => now(),
+                'offer_id' => 2,
+            ],
+        ]);
     }
 }

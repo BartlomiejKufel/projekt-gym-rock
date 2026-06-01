@@ -20,9 +20,6 @@ const Settings = ({ userId, setUserId }) => {
             .then((response) => response.json())
             .then((data) => {
                 setUser(data);
-            })
-            .catch((error) => {
-                console.error("Error fetching user:", error);
             });
     }, [userId]);
 

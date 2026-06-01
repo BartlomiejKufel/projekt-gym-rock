@@ -23,8 +23,7 @@ const RegisterSuccess = ({ setMainNavbarVisible }) => {
         .then((response) => response.json())
         .then((data) => {
           setEvent(data);
-        })
-        .catch((error) => console.error("Error fetching event details:", error));
+        });
     }
   }, [eventId]);
 

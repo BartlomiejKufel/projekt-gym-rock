@@ -1,0 +1,51 @@
+<?php
+
+return [
+    'required' => 'Pole :attribute jest wymagane.',
+    'string' => 'Pole :attribute musi być ciągiem znaków.',
+    'email' => 'Pole :attribute musi być poprawnym adresem e-mail.',
+    'date' => 'Pole :attribute musi być poprawną datą.',
+    'integer' => 'Pole :attribute musi być liczbą całkowitą.',
+    'numeric' => 'Pole :attribute musi być liczbą.',
+    'unique' => 'Podana wartość pola :attribute jest już zajęta.',
+    'exists' => 'Wybrana wartość pola :attribute jest niepoprawna.',
+    'after_or_equal' => 'Pole :attribute musi być datą nie wcześniejszą niż :date.',
+    
+    'max' => [
+        'string' => 'Pole :attribute nie może być dłuższe niż :max znaków.',
+    ],
+    'min' => [
+        'string' => 'Pole :attribute musi mieć co najmniej :min znaków.',
+    ],
+
+    'attributes' => [
+        'name' => 'nazwa / imię',
+        'surname' => 'nazwisko',
+        'login' => 'login',
+        'password' => 'hasło',
+        'email' => 'adres e-mail',
+        'date_of_birth' => 'data urodzenia',
+        'profile_picture' => 'zdjęcie profilowe',
+        'role_id' => 'rola',
+        'customer_id' => 'klient',
+        'employee_id' => 'pracownik',
+        'price' => 'cena',
+        'purchase_date' => 'data zakupu',
+        'offer_id' => 'oferta',
+        'duration' => 'czas trwania',
+        'creator_id' => 'twórca',
+        'description' => 'opis',
+        'start_date' => 'data rozpoczęcia',
+        'end_date' => 'data zakończenia',
+        'instructor_id' => 'instruktor',
+        'event_color' => 'kolor wydarzenia',
+        'participants_limit' => 'limit uczestników',
+        'user_id' => 'użytkownik',
+        'date_of_entry' => 'data wejścia',
+        'start_time' => 'godzina rozpoczęcia',
+        'end_time' => 'godzina zakończenia',
+        'time_spent' => 'spędzony czas',
+        'participant_id' => 'uczestnik',
+        'qr_code' => 'kod QR',
+    ],
+];

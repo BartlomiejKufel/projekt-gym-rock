@@ -18,8 +18,7 @@ const Header = ({ title, setMainNavbarVisible, userId }) => {
         .then((response) => response.json())
         .then((data) => {
           setCurrentUser(data);
-        })
-        .catch((error) => console.error("Error fetching user data:", error));
+        });
     }
   }, [userId]);
 
@@ -53,9 +52,6 @@ const Header = ({ title, setMainNavbarVisible, userId }) => {
           });
           setReminder(mapped);
         }
-      })
-      .catch((error) => {
-        console.error("Error fetching registered events:", error);
       });
   };
 
@@ -73,9 +69,6 @@ const Header = ({ title, setMainNavbarVisible, userId }) => {
           });
           setNotifications(mapped);
         }
-      })
-      .catch((error) => {
-        console.error("Error fetching notifications:", error);
       });
   };
 

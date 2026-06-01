@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\Notification;
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreNotificationRequest;
 
 class NotificationController extends Controller
 {
@@ -38,15 +39,9 @@ class NotificationController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreNotificationRequest $request)
     {
-        $validated = $request->validate([
-            'creator_id' => 'required|exists:users,user_id',
-            'name' => 'required|string|max:255',
-            'description' => 'required|string',
-            'start_date' => 'required|date',
-            'end_date' => 'required|date|after_or_equal:start_date',
-        ]);
+        $validated = $request->validated();
         
         $notification = Notification::create($validated);
         return response()->json($notification, 201);
@@ -62,7 +57,7 @@ class NotificationController extends Controller
             $notification->creator?->makeHidden('profile_picture');
             return response()->json($notification, 200);
         }
-        return response()->json(['message' => 'Notification not found'], 404);
+        return response()->json(['message' => 'Nie znaleziono powiadomienia'], 404);
     }
 
     /**
@@ -75,7 +70,7 @@ class NotificationController extends Controller
             $notification->update($request->all());
             return response()->json($notification, 200);
         }
-        return response()->json(['message' => 'Notification not found'], 404);
+        return response()->json(['message' => 'Nie znaleziono powiadomienia'], 404);
     }
 
     /**
@@ -86,8 +81,8 @@ class NotificationController extends Controller
         $notification = Notification::find($id);
         if ($notification) {
             $notification->delete();
-            return response()->json(['message' => 'Notification deleted'], 200);
+            return response()->json(['message' => 'Powiadomienie zostało usunięte'], 200);
         }
-        return response()->json(['message' => 'Notification not found'], 404);
+        return response()->json(['message' => 'Nie znaleziono powiadomienia'], 404);
     }
 }

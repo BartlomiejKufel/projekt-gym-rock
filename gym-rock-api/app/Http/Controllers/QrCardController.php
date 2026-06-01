@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\QrCard;
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreQrCardRequest;
 
 class QrCardController extends Controller
 {
@@ -20,12 +21,9 @@ class QrCardController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreQrCardRequest $request)
     {
-        $validated = $request->validate([
-            'user_id' => 'required|exists:users,user_id',
-            'qr_code' => 'required|string',
-        ]);
+        $validated = $request->validated();
         $card = QrCard::create($validated);
         return response()->json($card, 201);
     }
@@ -39,7 +37,7 @@ class QrCardController extends Controller
         if ($card) {
             return response()->json($card, 200);
         }
-        return response()->json(['message' => 'Card not found'], 404);
+        return response()->json(['message' => 'Nie znaleziono karty'], 404);
     }
 
     /**
@@ -52,7 +50,7 @@ class QrCardController extends Controller
             $card->update($request->all());
             return response()->json($card, 200);
         }
-        return response()->json(['message' => 'Card not found'], 404);
+        return response()->json(['message' => 'Nie znaleziono karty'], 404);
     }
 
     /**
@@ -63,9 +61,9 @@ class QrCardController extends Controller
         $card = QrCard::find($id);
         if ($card) {
             $card->delete();
-            return response()->json(['message' => 'Card deleted'], 200);
+            return response()->json(['message' => 'Karta została usunięta'], 200);
         }
-        return response()->json(['message' => 'Card not found'], 404);
+        return response()->json(['message' => 'Nie znaleziono karty'], 404);
     }
 
     /**
@@ -76,7 +74,7 @@ class QrCardController extends Controller
         $card = QrCard::where('user_id', $userId)->first();
 
         if (!$card || !$card->qr_code) {
-            return response()->json(['message' => 'QR Code not found for this user'], 404);
+            return response()->json(['message' => 'Nie znaleziono kodu QR dla tego użytkownika'], 404);
         }
 
         $qrCode = $card->qr_code;

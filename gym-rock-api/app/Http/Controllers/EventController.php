@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\Event;
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreEventRequest;
 
 class EventController extends Controller
 {
@@ -30,18 +31,9 @@ class EventController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreEventRequest $request)
     {
-        $validated = $request->validate([
-            'instructor_id' => 'required|exists:users,user_id',
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'event_color' => 'required|string|max:7',
-            'participants_limit' => 'required|integer',
-            'offer_id' => 'required|exists:offers,offer_id',
-            'start_date' => 'required|date',
-            'end_date' => 'required|date|after_or_equal:start_date',
-        ]);
+        $validated = $request->validated();
         
         $event = Event::create($validated);
         return response()->json($event, 201);
@@ -58,7 +50,7 @@ class EventController extends Controller
             $event->participants?->makeHidden('profile_picture');
             return response()->json($event, 200);
         }
-        return response()->json(['message' => 'Event not found'], 404);
+        return response()->json(['message' => 'Nie znaleziono wydarzenia'], 404);
     }
 
     /**
@@ -71,7 +63,7 @@ class EventController extends Controller
             $event->update($request->all());
             return response()->json($event, 200);
         }
-        return response()->json(['message' => 'Event not found'], 404);
+        return response()->json(['message' => 'Nie znaleziono wydarzenia'], 404);
     }
 
     /**
@@ -82,8 +74,8 @@ class EventController extends Controller
         $event = Event::find($id);
         if ($event) {
             $event->delete();
-            return response()->json(['message' => 'Event deleted'], 200);
+            return response()->json(['message' => 'Wydarzenie zostało usunięte'], 200);
         }
-        return response()->json(['message' => 'Event not found'], 404);
+        return response()->json(['message' => 'Nie znaleziono wydarzenia'], 404);
     }
 }

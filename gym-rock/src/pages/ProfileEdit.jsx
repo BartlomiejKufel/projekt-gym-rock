@@ -23,10 +23,6 @@ const ProfileEdit = ({ userId }) => {
                 setSurname(data.surname || "");
                 setEmail(data.email || "");
                 setDateOfBirth(data.date_of_birth || "");
-            })
-            .catch((error) => {
-                console.error("Error fetching user data:", error);
-                setErrorMsg("Błąd podczas ładowania danych użytkownika.");
             });
     }, [userId]);
 

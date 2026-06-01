@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreUserRequest;
+use App\Http\Requests\LoginUserRequest;
+use App\Http\Requests\UpdateUserRequest;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
@@ -21,18 +24,9 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreUserRequest $request)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'surname' => 'required|string|max:255',
-            'login' => 'required|string|max:255|unique:users,login',
-            'password' => 'required|string|min:6',
-            'email' => 'required|string|email|max:255|unique:users,email',
-            'date_of_birth' => 'nullable|date',
-            'profile_picture' => 'nullable|string',
-            'role_id' => 'required|exists:roles,role_id',
-        ]);
+        $validated = $request->validated();
         
         // Hash password before saving
         $validated['password'] = bcrypt($validated['password']);
@@ -51,26 +45,29 @@ class UserController extends Controller
             $user->makeHidden('profile_picture');
             return response()->json($user, 200);
         }
-        return response()->json(['message' => 'User not found'], 404);
+        return response()->json(['message' => 'Nie znaleziono użytkownika'], 404);
     }
 
-    public function login(Request $request)
+    public function login(LoginUserRequest $request)
     {
-        $user = User::where('login', $request->login)->first()->makeHidden('profile_picture');
-        if ($user && Hash::check($request->password, $user->password)) {
+        $validated = $request->validated();
+        $user = User::where('login', $validated['login'])->first();
+        
+        if ($user && Hash::check($validated['password'], $user->password)) {
+            $user->makeHidden('profile_picture');
             return response()->json($user, 200);
         }
-        return response()->json(['message' => 'User not found'], 404);
+        return response()->json(['message' => 'Nie znaleziono użytkownika'], 404);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateUserRequest $request, string $id)
     {
         $user = User::find($id);
         if ($user) {
-            $data = $request->all();
+            $data = $request->validated();
             if (isset($data['password'])) {
                 $data['password'] = bcrypt($data['password']);
             }
@@ -78,7 +75,7 @@ class UserController extends Controller
             $user->makeHidden('profile_picture');
             return response()->json($user, 200);
         }
-        return response()->json(['message' => 'User not found'], 404);
+        return response()->json(['message' => 'Nie znaleziono użytkownika'], 404);
     }
 
     /**
@@ -89,9 +86,9 @@ class UserController extends Controller
         $user = User::find($id);
         if ($user) {
             $user->delete();
-            return response()->json(['message' => 'User deleted'], 200);
+            return response()->json(['message' => 'Użytkownik został usunięty'], 200);
         }
-        return response()->json(['message' => 'User not found'], 404);
+        return response()->json(['message' => 'Nie znaleziono użytkownika'], 404);
     }
 
     /**
@@ -102,7 +99,7 @@ class UserController extends Controller
         $user = User::where('user_id', $userId)->first();
 
         if (!$user || !$user->profile_picture) {
-            return response()->json(['message' => 'Image not found for this user'], 404);
+            return response()->json(['message' => 'Nie znaleziono zdjęcia dla tego użytkownika'], 404);
         }
 
         $profile_picture = $user->profile_picture;

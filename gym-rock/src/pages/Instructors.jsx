@@ -30,25 +30,20 @@ const Instructors = ({ userId }) => {
       .then((response) => response.json())
       .then((data) => {
         setActiveEventDetails(data);
-      })
-      .catch((error) => console.error("Error loading event details:", error));
+      });
   };
   const handleUnregister = async () => {
     if (!selectedEvent) return;
-    try {
-      const response = await fetch(`http://localhost:8000/api/events/${selectedEvent.event_id}/unregister`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ participant_id: userId })
-      });
-      if (response.ok) {
-        handleEventClick(selectedEvent);
-        fetchRegisteredEvents();
-      } else {
-        console.error("Błąd podczas wypisywania się z wydarzenia");
-      }
-    } catch (error) {
-      console.error("Błąd połączenia podczas wypisywania się", error);
+    const response = await fetch(`http://localhost:8000/api/events/${selectedEvent.event_id}/unregister`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ participant_id: userId })
+    });
+    if (response.ok) {
+      handleEventClick(selectedEvent);
+      fetchRegisteredEvents();
+    } else {
+      console.error("Błąd podczas wypisywania się z wydarzenia");
     }
   };
 
@@ -82,9 +77,6 @@ const Instructors = ({ userId }) => {
           });
           setReminder(mapped);
         }
-      })
-      .catch((error) => {
-        console.error("Error fetching registered events:", error);
       });
   };
 
@@ -117,9 +109,6 @@ const Instructors = ({ userId }) => {
           };
         });
         setEvents(mapped);
-      })
-      .catch((error) => {
-        console.error("Error fetching events:", error);
       });
   }, [selectedDate]);
 

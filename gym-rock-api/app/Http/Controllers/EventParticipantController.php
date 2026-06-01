@@ -6,23 +6,22 @@ use App\Http\Controllers\Controller;
 use App\Models\Event;
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreEventParticipantRequest;
 
 class EventParticipantController extends Controller
 {
     /**
      * Zapisz użytkownika na wydarzenie.
      */
-    public function register(Request $request, $eventId)
+    public function register(StoreEventParticipantRequest $request, $eventId)
     {
-        $validated = $request->validate([
-            'participant_id' => 'required|exists:users,user_id',
-        ]);
+        $validated = $request->validated();
 
         $userId = $validated['participant_id'];
 
         $event = Event::find($eventId);
         if (!$event) {
-            return response()->json(['message' => 'Event not found'], 404);
+            return response()->json(['message' => 'Nie znaleziono wydarzenia'], 404);
         }
 
         // Sprawdź, czy użytkownik jest już zapisany
@@ -57,17 +56,15 @@ class EventParticipantController extends Controller
     /**
      * Wypisz użytkownika z wydarzenia.
      */
-    public function unregister(Request $request, $eventId)
+    public function unregister(StoreEventParticipantRequest $request, $eventId)
     {
-        $validated = $request->validate([
-            'participant_id' => 'required|exists:users,user_id',
-        ]);
+        $validated = $request->validated();
 
         $userId = $validated['participant_id'];
 
         $event = Event::find($eventId);
         if (!$event) {
-            return response()->json(['message' => 'Event not found'], 404);
+            return response()->json(['message' => 'Nie znaleziono wydarzenia'], 404);
         }
 
         // Sprawdź, czy użytkownik jest zapisany
@@ -88,7 +85,7 @@ class EventParticipantController extends Controller
     {
         $event = Event::find($eventId);
         if (!$event) {
-            return response()->json(['message' => 'Event not found'], 404);
+            return response()->json(['message' => 'Nie znaleziono wydarzenia'], 404);
         }
 
         $participants = $event->participants()->get(['users.user_id', 'users.name', 'users.surname']);
@@ -103,7 +100,7 @@ class EventParticipantController extends Controller
     {
         $user = User::find($userId);
         if (!$user) {
-            return response()->json(['message' => 'User not found'], 404);
+            return response()->json(['message' => 'Nie znaleziono użytkownika'], 404);
         }
 
         $events = $user->registeredEvents()

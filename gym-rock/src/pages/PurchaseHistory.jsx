@@ -10,9 +10,6 @@ const PurchaseHistory = ({ userId }) => {
             .then((response) => response.json())
             .then((data) => {
                 setPurchaseHistory(data);
-            })
-            .catch((error) => {
-                console.error("Error fetching purchase history:", error);
             });
     }, [userId]);
 

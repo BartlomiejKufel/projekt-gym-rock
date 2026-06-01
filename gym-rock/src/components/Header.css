@@ -54,7 +54,6 @@
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
 }
 
-/* Notifications Overlay */
 .notifications-overlay {
     position: fixed;
     top: 0;

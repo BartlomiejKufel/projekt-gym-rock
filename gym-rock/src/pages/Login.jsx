@@ -8,6 +8,7 @@ const Login = ({ setHeaderVisible, setMainNavbarVisible, setUserId }) => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [rememberMe, setRememberMe] = useState(false);
+    const [error, setError] = useState("");
 
     useEffect(() => {
         if (setHeaderVisible) setHeaderVisible(false);
@@ -26,6 +27,7 @@ const Login = ({ setHeaderVisible, setMainNavbarVisible, setUserId }) => {
 
     const handleLogin = async (e) => {
         e.preventDefault();
+        setError("");
 
         try {
             const response = await fetch('http://127.0.0.1:8000/api/users/login', {
@@ -51,10 +53,12 @@ const Login = ({ setHeaderVisible, setMainNavbarVisible, setUserId }) => {
                 setUserId(data.user_id);
                 navigate("/home");
             } else {
+                setError(data.message || "Błędny login lub hasło.");
                 console.error(data.message);
             }
-        } catch (error) {
-            console.error(error);
+        } catch (err) {
+            setError("Wystąpił błąd podczas logowania.");
+            console.error(err);
         }
     };
 
@@ -66,7 +70,8 @@ const Login = ({ setHeaderVisible, setMainNavbarVisible, setUserId }) => {
                 </div>
 
                 <div className="login-card p-4 p-md-5">
-                    <Form>
+                    {error && <div className="alert alert-danger">{error}</div>}
+                    <Form onSubmit={handleLogin}>
                         <Form.Group className="mb-4" controlId="formBasicLogin">
                             <Form.Label className="login-label fw-bold">Login</Form.Label>
                             <InputGroup>
