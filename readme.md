@@ -26,7 +26,6 @@ System stawia na bezpośrednią wygodę użytkownika i minimalizm. Gym Rock ofer
 Do uruchomienia projektu wymagane są:
 - **Node.js** (zalecana wersja 20+) oraz menedżer pakietów **npm**.
 - **PHP** (wersja 8.3 lub nowsza).
-- **Composer** (do zarządzania zależnościami PHP).
 - **Git** (do pobrania repozytorium).
 
 ### Proces instalacji i konfiguracji
@@ -75,6 +74,16 @@ npm run dev
 ```
 *Aplikacja frontendowa będzie dostępna w przeglądarce pod adresem wyświetlonym w terminalu (np. `http://localhost:5173`).*
 
+**Gdy będziemy już na stronie**
+Mamy możliwość zalogowania się jako czwórka różnych użytkowników:
+
+| Imie i nazwisko | Login | Hasło |
+|-----------|-------------|--------|
+| Jan Kowalski | admin | admin |
+| Piotr Wiśniewski | instruktor | instruktor |
+| Marta Wójcik | klient | klient |
+| Anna Nowak | pracownik | pracownik |
+
 ## Podręcznik użytkownika
 
 W tej części skup się na **biznesowej stronie aplikacji** (najlepiej wspomagając się zrzutami ekranu z działającego projektu).
@@ -90,6 +99,5 @@ Każde zdjęcie powinno mieć opis, który wyjaśnia, co jest na zdjęciu.
 
 ## Plany rozbudowy
 
-- Czego zabrakło w pierwszej wersji projektu?
-- Jakie funkcjonalności mogłyby powstać w "v2.0" (np. integracja z płatnościami, system powiadomień mailowych)?
-- Gdzie dostrzegacie potencjał na optymalizację (np. dodanie cache'owania, zmiana bazy danych)?
+- W orginalnej wersji projektu zabrakło dodania możliwości zakupów karnetów przez użytkowiników. Standardowo klienci muszą kupować karnety na miejscu, co zwiększa kolejki i czas obsługi. Docelowo planowane jest dodanie możliwości zakupu karnetów online.
+- Wspinacze lubią sprawdzać i porównywać swoje statystyki, dobrą opcją byłoby dodanie ligi dla wspinaczy, gdzie mogliby rywalizować między sobą. Dodatkowo można by dodać możliwość oceniania dróg przez wspinaczy, co pozwoliłoby na stworzenie rankingu trudności dróg. 
