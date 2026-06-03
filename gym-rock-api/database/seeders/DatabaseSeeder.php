@@ -7,6 +7,9 @@ use App\Models\Role;
 use App\Models\User;
 use App\Models\Offer;
 use App\Models\PurchaseHistory;
+use App\Models\Entrance;
+use App\Models\Notification;
+use App\Models\QrCard;
 use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
@@ -20,6 +23,11 @@ class DatabaseSeeder extends Seeder
             ['name' => 'klient'],
         ]);
 
+        $pp1Path = database_path('seeders/images/pp1.png');
+        $pp2Path = database_path('seeders/images/pp2.png');
+        $pp3Path = database_path('seeders/images/pp3.png');
+        $pp4Path = database_path('seeders/images/pp4.png');
+
         User::insert([
             [
                 'name' => 'Jan',
@@ -28,6 +36,7 @@ class DatabaseSeeder extends Seeder
                 'password' => Hash::make('admin'),
                 'email' => 'jan.kowalski@example.com',
                 'date_of_birth' => '1985-04-12',
+                'profile_picture' => file_get_contents($pp1Path),
                 'role_id' => 1,
             ],
             [
@@ -37,6 +46,7 @@ class DatabaseSeeder extends Seeder
                 'password' => Hash::make('pracownik'),
                 'email' => 'anna.nowak@example.com',
                 'date_of_birth' => '1992-11-23',
+                'profile_picture' => file_get_contents($pp2Path),
                 'role_id' => 2,
             ],
             [
@@ -46,6 +56,7 @@ class DatabaseSeeder extends Seeder
                 'password' => Hash::make('instruktor'),
                 'email' => 'piotr.wisniewski@example.com',
                 'date_of_birth' => '1995-07-08',
+                'profile_picture' => file_get_contents($pp3Path),
                 'role_id' => 3,
             ],
             [
@@ -55,6 +66,7 @@ class DatabaseSeeder extends Seeder
                 'password' => Hash::make('klient'),
                 'email' => 'marta.wojcik@example.com',
                 'date_of_birth' => '2002-02-15',
+                'profile_picture' => file_get_contents($pp4Path),
                 'role_id' => 4,
             ]
         ]);
@@ -117,7 +129,7 @@ class DatabaseSeeder extends Seeder
             ],
             [
                 'name' => 'Wydarzenie',
-                'price' => 0.0,
+                'price' => 30.0,
                 'duration' => 0,
             ],
         ]);
@@ -131,5 +143,42 @@ class DatabaseSeeder extends Seeder
                 'offer_id' => 2,
             ],
         ]);
+
+        $entrances = [];
+
+        for ($i = 0; $i < 30; $i+=2) {
+            $entrances[] = [
+                'user_id' => 4, 
+                'date_of_entry' => now()->subDays($i)->toDateString(), 
+                'start_time' => '15:20:00', 
+                'end_time' => '19:50:00', 
+                'time_spent' => '04:30:00'
+            ];
+        }
+
+        Entrance::insert($entrances);
+
+        Notification::insert([
+            'creator_id' => 2,
+            'name' => "Gratisy",
+            'description' => "Na recepcji można jednorazowo odebrać magnezję w kostce.",
+            'start_date' => now(),
+            'end_date' => now()->addDays(30)
+        ]);
+
+        $qrPath = database_path('seeders/images/qr.png');
+        $binaryQR = file_get_contents($qrPath);
+
+        $qrs = [];
+
+        for ($i = 2; $i <= 4; $i++) {
+            $qrs[] = [
+                'user_id' => "$i",
+                'qr_code' => $binaryQR,
+                'date_of_creation' => now(),
+            ];
+        }
+
+        QrCard::insert($qrs);
     }
 }
