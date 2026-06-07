@@ -15,11 +15,12 @@ import Contact from './pages/Contact';
 import AddEvent from './pages/AddEvent';
 import RegisterSuccess from './pages/RegisterSuccess';
 import RegisterEvent from './pages/RegisterEvent';
+import Promotion from './pages/Promotion';
 
 
 const ProtectedRoute = ({ userId, children }) => {
   if (!userId) {
-    return <Navigate to="/" replace />;
+    return <Navigate to="/login" replace />;
   }
   return children;
 };
@@ -31,6 +32,9 @@ const TitleUpdater = ({ setTitle }) => {
     let currentTitle = "Home";
     switch (location.pathname) {
       case "/":
+        currentTitle = "Strona Główna";
+        break;
+      case "/login":
         currentTitle = "Logowanie";
         break;
       case "/home":
@@ -88,7 +92,8 @@ function App() {
       <TitleUpdater setTitle={setTitle} />
       {headerVisible && <Header title={title} setMainNavbarVisible={setMainNavbarVisible} userId={userId} />}
       <Routes>
-        <Route path="/" element={<Login setHeaderVisible={setHeaderVisible} setMainNavbarVisible={setMainNavbarVisible} setUserId={setUserId} />} />
+        <Route path="/" element={<Promotion setHeaderVisible={setHeaderVisible} setMainNavbarVisible={setMainNavbarVisible} />} />
+        <Route path="/login" element={<Login setHeaderVisible={setHeaderVisible} setMainNavbarVisible={setMainNavbarVisible} setUserId={setUserId} />} />
         <Route path="/instructors" element={<ProtectedRoute userId={userId}><Instructors userId={userId} /></ProtectedRoute>} />
         <Route path="/instructors/add" element={<ProtectedRoute userId={userId}><AddEvent userId={userId} /></ProtectedRoute>} />
         <Route path="/register-event/:eventId" element={<ProtectedRoute userId={userId}><RegisterEvent userId={userId} /></ProtectedRoute>} />

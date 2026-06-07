@@ -9,7 +9,8 @@ const Home = ({ userId }) => {
         fetch(`http://127.0.0.1:8000/api/purchases/${userId}/active`)
             .then((response) => response.json())
             .then((data) => {
-                setActivePasses(data);
+                const filtered = Array.isArray(data) ? data.filter(pass => pass.days_left > 0) : [];
+                setActivePasses(filtered);
             });
     };
 

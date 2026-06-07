@@ -17,7 +17,7 @@ class EventController extends Controller
     
     public function index(Request $request)
     {
-        $query = Event::with(['instructor:user_id,name,surname']);
+        $query = Event::with(['instructor:user_id,name,surname'])->withCount('participants');
 
         if ($request->filled('date')) {
             $query->whereDate('start_date', $request->query('date'));

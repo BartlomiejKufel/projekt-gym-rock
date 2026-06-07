@@ -22,10 +22,12 @@ const Instructors = ({ userId }) => {
   const [reminders, setReminder] = useState([]);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [activeEventDetails, setActiveEventDetails] = useState(null);
+  const [showParticipantsList, setShowParticipantsList] = useState(false);
 
   const handleEventClick = (event) => {
     setSelectedEvent(event);
     setActiveEventDetails(null);
+    setShowParticipantsList(false);
     fetch(`http://localhost:8000/api/events/${event.event_id}`)
       .then((response) => response.json())
       .then((data) => {
@@ -44,6 +46,28 @@ const Instructors = ({ userId }) => {
       fetchRegisteredEvents();
     } else {
       console.error("Błąd podczas wypisywania się z wydarzenia");
+    }
+  };
+
+  const handleDeleteEvent = async () => {
+    if (!selectedEvent) return;
+    if (!window.confirm("Czy na pewno chcesz usunąć to wydarzenie?")) return;
+
+    try {
+      const response = await fetch(`http://localhost:8000/api/events/${selectedEvent.event_id}`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" }
+      });
+      if (response.ok) {
+        setSelectedEvent(null);
+        setActiveEventDetails(null);
+        setShowParticipantsList(false);
+        fetchEvents();
+      } else {
+        console.error("Błąd podczas usuwania wydarzenia");
+      }
+    } catch (err) {
+      console.error(err);
     }
   };
 
@@ -84,7 +108,7 @@ const Instructors = ({ userId }) => {
     fetchRegisteredEvents();
   }, [userId]);
 
-  useEffect(() => {
+  const fetchEvents = () => {
     fetch(`http://localhost:8000/api/events?date=${selectedDate}`)
       .then((response) => response.json())
       .then((data) => {
@@ -96,6 +120,7 @@ const Instructors = ({ userId }) => {
 
           return {
             event_id: event.event_id,
+            instructor_id: event.instructor_id,
             registration_limit: event.end_date,
             start: startHour,
             end: endHour,
@@ -110,6 +135,10 @@ const Instructors = ({ userId }) => {
         });
         setEvents(mapped);
       });
+  };
+
+  useEffect(() => {
+    fetchEvents();
   }, [selectedDate]);
 
   const isPastLimit = (registration_limit) => {
@@ -123,6 +152,8 @@ const Instructors = ({ userId }) => {
       (participant) => Number(participant.user_id) === Number(userId)
     );
   };
+
+  const isInstructor = selectedEvent && Number(userId) === Number(selectedEvent.instructor_id);
 
   return (
     <Container className="mb-5 pt-4">
@@ -193,12 +224,12 @@ const Instructors = ({ userId }) => {
 
       {selectedEvent && (
         <div className="event-modal-overlay">
-          <div className="event-modal-backdrop" onClick={() => { setSelectedEvent(null); setActiveEventDetails(null); }}></div>
+          <div className="event-modal-backdrop" onClick={() => { setSelectedEvent(null); setActiveEventDetails(null); setShowParticipantsList(false); }}></div>
           <div
             className="event-modal-panel"
             style={{ backgroundColor: selectedEvent.color }}
           >
-            <div className="d-flex justify-content-center pt-3 pb-2" onClick={() => { setSelectedEvent(null); setActiveEventDetails(null); }} style={{ cursor: "pointer" }}>
+            <div className="d-flex justify-content-center pt-3 pb-2" onClick={() => { setSelectedEvent(null); setActiveEventDetails(null); setShowParticipantsList(false); }} style={{ cursor: "pointer" }}>
               <div className="event-modal-handle"></div>
             </div>
             <div className="px-4 pt-3 pb-5 text-white">
@@ -236,8 +267,25 @@ const Instructors = ({ userId }) => {
                 </div>
               </div>
 
-              <div className="d-flex justify-content-center mb-4">
-                {isUserRegistered() ? (
+              <div className="d-flex justify-content-center mb-4 gap-3 flex-wrap">
+                {isInstructor ? (
+                  <>
+                    <button
+                      className="btn btn-light event-register-btn fw-bold px-4 py-3 shadow-sm border-0"
+                      onClick={() => setShowParticipantsList(!showParticipantsList)}
+                    >
+                      {showParticipantsList ? "Ukryj szczegóły" : "Zobacz szczegóły"}
+                    </button>
+                    {activeEventDetails && activeEventDetails.participants && activeEventDetails.participants.length === 0 && (
+                      <button
+                        className="btn btn-danger event-register-btn fw-bold px-4 py-3 shadow-sm border-0"
+                        onClick={handleDeleteEvent}
+                      >
+                        Usuń wydarzenie
+                      </button>
+                    )}
+                  </>
+                ) : isUserRegistered() ? (
                   <button
                     className="btn btn-danger event-register-btn fw-bold px-5 py-3 shadow-sm border-0"
                     onClick={handleUnregister}
@@ -266,6 +314,32 @@ const Instructors = ({ userId }) => {
                   </button>
                 )}
               </div>
+
+              {isInstructor && showParticipantsList && (
+                <div className="mt-4 pt-3 border-top border-white-50">
+                  <h5 className="fw-bold mb-3">Lista zapisanych uczestników:</h5>
+                  {activeEventDetails ? (
+                    activeEventDetails.participants && activeEventDetails.participants.length > 0 ? (
+                      <ol className="ps-3 mb-0" style={{ fontSize: "0.95rem", lineHeight: "1.6", textAlign: "left" }}>
+                        {activeEventDetails.participants.map((participant) => (
+                          <li key={participant.user_id} className="mb-2">
+                            <span className="fw-semibold">{participant.name} {participant.surname}</span>
+                            {participant.pivot?.date_of_registration && (
+                              <span className="text-white-50 small d-block">
+                                Zapisano: {new Date(participant.pivot.date_of_registration.replace(' ', 'T')).toLocaleDateString("pl-PL")}
+                              </span>
+                            )}
+                          </li>
+                        ))}
+                      </ol>
+                    ) : (
+                      <p className="text-white-50 small mb-0 italic">Brak zapisanych uczestników na to wydarzenie.</p>
+                    )
+                  ) : (
+                    <p className="text-white-50 small mb-0">Ładowanie uczestników...</p>
+                  )}
+                </div>
+              )}
             </div>
           </div>
         </div>

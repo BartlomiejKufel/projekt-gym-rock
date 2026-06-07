@@ -1,0 +1,192 @@
+.promotion-page-wrapper {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.45)), url('/img/main-wall.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+}
+
+.promotion-container {
+    animation: fadeIn 0.8s ease-out;
+}
+
+.promotion-logo {
+    max-width: 260px;
+    height: auto;
+    filter: drop-shadow(2px 4px 8px rgba(0, 0, 0, 0.6));
+    transition: transform 0.3s ease;
+}
+
+.promotion-logo:hover {
+    transform: scale(1.03);
+}
+
+.promotion-title {
+    font-size: 3rem;
+    line-height: 1.2;
+    letter-spacing: -0.5px;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.promotion-subtitle {
+    line-height: 1.6;
+    max-width: 450px;
+}
+
+.promotion-cta-btn {
+    border-radius: 50px !important;
+    font-size: 1.1rem !important;
+    letter-spacing: 0.5px;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
+    background-color: #ffffff !important;
+    color: #1a1a1a !important;
+}
+
+
+/* White Glassmorphic Events Card Container */
+.promotion-events-card {
+    background-color: rgba(255, 255, 255, 0.85);
+    border-radius: 20px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    width: 100%;
+}
+
+.events-card-title {
+    font-size: 1.5rem;
+    letter-spacing: -0.3px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    padding-bottom: 15px;
+}
+
+.fs-7 {
+    font-size: 0.75rem !important;
+    padding: 5px 10px !important;
+}
+
+.events-spinner {
+    width: 3rem;
+    height: 3rem;
+}
+
+/* Individual Promo Event Cards */
+.promo-event-card {
+    border-radius: 12px !important;
+    border: none !important;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
+}
+
+.promo-event-card:hover {
+    transform: translateY(-4px);
+    filter: brightness(1.15);
+}
+
+.promo-event-card:hover .promo-event-join-hint {
+    color: #ffffff !important;
+    transform: translateX(3px);
+}
+
+.promo-instructor-wrapper {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+    border: 2px solid rgba(255, 255, 255, 0.25);
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.promo-instructor-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.promo-event-name {
+    font-size: 1.05rem;
+    letter-spacing: -0.2px;
+}
+
+.promo-event-date {
+    font-size: 0.85rem;
+}
+
+.promo-event-instructor {
+    font-size: 0.8rem;
+    margin-top: 2px;
+}
+
+.promo-event-spots {
+    font-size: 0.8rem !important;
+    padding: 6px 12px !important;
+    border-radius: 20px !important;
+}
+
+.promo-event-join-hint {
+    font-size: 0.75rem;
+    transition: all 0.2s ease;
+    display: inline-block;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive Overrides */
+@media (max-width: 991.98px) {
+    .promotion-title {
+        font-size: 2.2rem;
+    }
+
+    .branding-column {
+        margin-bottom: 20px;
+    }
+
+    .promotion-logo {
+        max-width: 220px;
+    }
+
+    .promotion-container {
+        padding-top: 2rem !important;
+        padding-bottom: 2rem !important;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .promotion-title {
+        font-size: 1.8rem;
+    }
+
+    .promotion-events-card {
+        padding: 1.5rem !important;
+    }
+
+    .promo-event-card .card-body {
+        flex-direction: column;
+        align-items: flex-start !important;
+        gap: 12px;
+    }
+
+    .promo-event-card .text-end {
+        text-align: left !important;
+        align-items: flex-start !important;
+        width: 100%;
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+        padding-top: 10px;
+        margin-top: 5px;
+    }
+}

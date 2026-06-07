@@ -1,5 +1,5 @@
 .login-page-wrapper {
-    background-image: url('/img/main-wall.jpg');
+    background-image: linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.45)), url('/img/main-wall.jpg');
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
@@ -83,4 +83,22 @@
     background-color: #23272b !important;
     transform: translateY(-2px);
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.login-back-btn {
+    position: absolute;
+    top: 25px;
+    left: 25px;
+    border-radius: 30px !important;
+    font-size: 0.9rem !important;
+    transition: background-color 0.2s ease-in-out !important;
+    background-color: #ffffff !important;
+    color: #1a1a1a !important;
+    box-shadow: none !important;
+    border: none !important;
+}
+
+.login-back-btn:hover {
+    background-color: #f0f0f0 !important;
+    color: #1a1a1a !important;
 }

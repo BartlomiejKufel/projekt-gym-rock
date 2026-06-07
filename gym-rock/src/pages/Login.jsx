@@ -63,7 +63,11 @@ const Login = ({ setHeaderVisible, setMainNavbarVisible, setUserId }) => {
     };
 
     return (
-        <div className="login-page-wrapper">
+        <div className="login-page-wrapper position-relative">
+            <Button variant="light" className="login-back-btn px-3 py-2 fw-semibold" onClick={() => navigate("/")}>
+                Powrót
+            </Button>
+
             <Container className="d-flex flex-column align-items-center justify-content-center min-vh-100">
                 <div className="login-logo-container mb-5">
                     <img src="/img/logo.png" alt="Rock Gym Logo" className="login-logo" />
